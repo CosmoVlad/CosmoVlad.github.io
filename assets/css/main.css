@@ -91,9 +91,11 @@ body {
 
 /* Type */
 body, input, select, textarea {
-  color: #7f888f;
-  font-family: "Open Sans", sans-serif;
-  font-size: 13pt;
+/*  color: #7f888f;*/
+  color: hsl(210, 7%, 40%); /* Darker version */
+/*  font-family: "Open Sans", sans-serif;*/
+  font-family: "Merriweather", serif;
+  font-size: 14pt;
   font-weight: 400;
   line-height: 1.65; }
   @media screen and (max-width: 1680px) {
@@ -2109,6 +2111,8 @@ button,
 
 /* Banner */
 #banner {
+  hyphens: auto;
+/*  word-wrap: break-word;*/
   padding: 6em 0 4em 0 ;
   display: -moz-flex;
   display: -webkit-flex;
@@ -2125,7 +2129,7 @@ button,
     -webkit-flex-shrink: 1;
     -ms-flex-shrink: 1;
     flex-shrink: 1;
-    width: 50%; }
+    width: 60%; }
   #banner .image {
     -moz-flex-grow: 0;
     -webkit-flex-grow: 0;
@@ -2137,9 +2141,9 @@ button,
     flex-shrink: 0;
     display: block;
     margin: 0 0 2em 4em;
-    width: 50%; }
+    width: 40%; }
     #banner .image img {
-      height: 100%;
+      height: 80%;
       -moz-object-fit: cover;
       -webkit-object-fit: cover;
       -ms-object-fit: cover;
