@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <title>Blog</title>
+        <title>Inferring the shape of a mass distribution</title>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="./theme/css/main.css" type="text/css" />
         <link href="./" type="application/atom+xml" rel="alternate" title="Blog ATOM Feed" />
@@ -27,9 +27,11 @@
                 </ul></nav>
         </header><!-- /#banner -->
 
-     <section id="content" class="body">
-        <aside id="featured"><article>
-                <h1 class="entry-title"><a href="./inferring-the-shape-of-a-mass-distribution.html">Inferring the shape of a mass distribution</a></h1>
+<section id="content" class="body">
+<article>
+        <header> <h1 class="entry-title"><a href="inferring-the-shape-of-a-mass-distribution.html"
+        rel="bookmark" title="Permalink to Inferring the shape of a mass distribution">Inferring the shape of a mass distribution</a></h1>  </header>
+        <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2025-02-13T00:00:00-05:00">
                 Thu 13 February 2025
@@ -40,7 +42,7 @@
         </address>
 <p>In <a href="./category/population-inference.html">population inference</a>. </p>
 </p></footer><!-- /.post-info --><!-- /.post-info -->
-                <h1>Introduction</h1>
+        <h1>Introduction</h1>
 <p><em>Population inference</em>, or <em>hierarchical inference</em>, is a class of inference problems where we want to constrain the (hyper)parameters of a theoretical distribution given a set of samples from that distribution. For example, consider the prices of a product in different stores. From theoretical considerations, we might expect that these prices follow a Gaussian distribution with some mean and standard deviation. Given the observed prices from various stores (samples), we can then try to infer the mean and standard deviation (hyperparameters). However, we must also keep in mind that we cannot always record all the samples we would like. For instance, smaller stores may not publish their price statistics, or we might not even be aware of those stores. This is referred to as <em>selection bias</em>, or <em>selection effects</em>. For consistent inference, we must be able to quantify the fraction of samples that fall through the cracks.</p>
 <p>In astrophysics, one of the fundamental properties of stars, galaxies, and other celestial objects is their mass. The shape of the mass distribution in an astrophysical population (e.g., stars) can provide valuable insights into that population. In this post, I summarize the inference process (see <a href="https://github.com/CosmoVlad/blog-code/tree/main/2025-02-12">full code</a>) for a simple mass distribution that follows a power law within a specific mass range:
 </p>
@@ -259,39 +261,16 @@ where we only include those <span class="math">\(N'\)</span> masses that are in 
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 </script>
-        </article></aside><!-- /#featured -->
-                <br><br>
-                <h1>Other articles</h1>
-                <hr />
-                    <ol id="posts-list" class="hfeed">
-        <li><article class="hentry">
-                <header>
-                        <h1><a href="./hello-world.html" rel="bookmark" title="Permalink to Hello, world!">Hello, world!</a></h1>
-                </header>
+        </div><!-- /.entry-content -->
 
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-01-28T00:00:00-05:00">
-                Tue 28 January 2025
-        </abbr>
-
-        <address class="vcard author">
-                By <a class="url fn" href="./author/vladimir-strokov.html">Vladimir Strokov</a>
-        </address>
-<p>In <a href="./category/tests.html">tests</a>. </p>
-</p></footer><!-- /.post-info --><!-- /.post-info -->
-                <p>This is the first post using <a href="https://getpelican.com/">pelican</a>. Although the pelican theme for this blog is called <a href="https://github.com/getpelican/pelican-themes/tree/master/notmyidea-cms">notmyidea-cms</a>, all posts represent my original work if not stated otherwise. I may later modify the theme to make it similar to the style of the <a href="https://cosmovlad.github.io">main page</a>.</p>
-                <a class="readmore" href="./hello-world.html">read more</a>
-                </div><!-- /.entry-content -->
-        </article></li>
-</ol><!-- /#posts-list -->
-</section><!-- /#content -->
+</article>
+</section>
 
         <aside id="sidebar">
                 <div class="widget">
                         <h2>Categories</h2>
                         <ul>
-                           <li ><a href="./category/population-inference.html">population inference</a></li>
+                           <li class="active"><a href="./category/population-inference.html">population inference</a></li>
                            <li ><a href="./category/tests.html">tests</a></li>
                         </ul>
                 </div>

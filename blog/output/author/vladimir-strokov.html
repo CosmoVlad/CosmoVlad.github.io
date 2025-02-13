@@ -29,7 +29,247 @@
 
      <section id="content" class="body">
         <aside id="featured"><article>
-                <h1 class="entry-title"><a href="../hello-world.html">Hello, world!</a></h1>
+                <h1 class="entry-title"><a href="../inferring-the-shape-of-a-mass-distribution.html">Inferring the shape of a mass distribution</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2025-02-13T00:00:00-05:00">
+                Thu 13 February 2025
+        </abbr>
+
+        <address class="vcard author">
+                By <a class="url fn" href="../author/vladimir-strokov.html">Vladimir Strokov</a>
+        </address>
+<p>In <a href="../category/population-inference.html">population inference</a>. </p>
+</p></footer><!-- /.post-info --><!-- /.post-info -->
+                <h1>Introduction</h1>
+<p><em>Population inference</em>, or <em>hierarchical inference</em>, is a class of inference problems where we want to constrain the (hyper)parameters of a theoretical distribution given a set of samples from that distribution. For example, consider the prices of a product in different stores. From theoretical considerations, we might expect that these prices follow a Gaussian distribution with some mean and standard deviation. Given the observed prices from various stores (samples), we can then try to infer the mean and standard deviation (hyperparameters). However, we must also keep in mind that we cannot always record all the samples we would like. For instance, smaller stores may not publish their price statistics, or we might not even be aware of those stores. This is referred to as <em>selection bias</em>, or <em>selection effects</em>. For consistent inference, we must be able to quantify the fraction of samples that fall through the cracks.</p>
+<p>In astrophysics, one of the fundamental properties of stars, galaxies, and other celestial objects is their mass. The shape of the mass distribution in an astrophysical population (e.g., stars) can provide valuable insights into that population. In this post, I summarize the inference process (see <a href="https://github.com/CosmoVlad/blog-code/tree/main/2025-02-12">full code</a>) for a simple mass distribution that follows a power law within a specific mass range:
+</p>
+<div class="math">$$
+f(m) = \frac{m^{-\alpha}}{A(\alpha, M_1, M_2)}\,, \qquad M_1\leq m\leq M_2\,,
+$$</div>
+<p>
+where <span class="math">\(A\)</span> is the normalization constant. Namely, assuming that the bounds <span class="math">\(M_1\)</span> and <span class="math">\(M_2\)</span> are known, let us infer <span class="math">\(\alpha\)</span> given a sample <span class="math">\(\left\{m_i\right\}_{i=1}^{N}\)</span> of <span class="math">\(N\)</span> masses from this distribution. Below I consider two cases:</p>
+<ol>
+<li>each mass in the sample is measured perfectly,</li>
+<li>there are individual measurement uncertainties described by log-normal probability distribution functions (PDF) centered at the true value of each mass.</li>
+</ol>
+<p>On the technical side, I use the following techniques:</p>
+<ul>
+<li>hierarchical Bayesian inference with selection effects; see, for example, <a href="https://arxiv.org/pdf/2007.05579">Vitale et al. (2022)</a> (especially, Section 6 for a specific example).</li>
+<li>Markov chain Monte Carlo; see, for example, <a href="https://arxiv.org/pdf/1710.06068">Hogg and Foreman-Mackey (2017)</a>.</li>
+<li>sampling from a distribution with a known CDF (cumulative distribution function); namely, the CDF for the mass distribution above is
+<div class="math">$$
+F(m) = \int\limits_{M_1}^{m}{{\rm d}m'\,f(m')}\,.
+$$</div>
+To draw a sample from it, one generates a uniformly random number <span class="math">\(r\)</span>, <span class="math">\(0\leq r\leq 1\)</span>, and then inverts the equation <span class="math">\(F(m)=r\)</span> to get the mass sample.</li>
+</ul>
+<h1>No measurement uncertainties</h1>
+<p>A starting point for the hierarchical inference is the log-posterior
+</p>
+<div class="math">$$
+\log{p(\alpha|D)} = \mbox{const} -N\log{\mathcal{F}} + \sum\limits_{i=1}^N{\log{\widetilde{f}(m_i)}}\,,
+$$</div>
+<p>
+where <span class="math">\(\mathcal{F}=\mathcal{F}(\alpha)\)</span> is the fraction of observed masses and <span class="math">\(\widetilde{f}(m)\)</span> is the effective mass distribution corrected for the uncertainties of individual events. In the ideal case of vanishing uncertainties, <span class="math">\(\widetilde{f}(m)=f(m)\)</span>. The fraction <span class="math">\(\mathcal{F}\)</span> quantifies potential selection effects and is defined as
+</p>
+<div class="math">$$
+\mathcal{F}(\alpha) = \int\limits_{M_1}^{M_2}{{\rm d}m_0\,f(m_0|\alpha)p(D_\uparrow|m_0)}\,,
+$$</div>
+<p>
+where <span class="math">\(p(D_\uparrow|m_0)\)</span> is the probability to detect a mass <span class="math">\(m_0\)</span>. </p>
+<p>In this ideal case, the probability of detecting a mass in the range <span class="math">\([M_1,M_2]\)</span> is unity, and, therefore,
+</p>
+<div class="math">$$
+\mathcal{F}(\alpha) = \int\limits_{M_1}^{M_2}{{\rm d}{m_0}\,f(m_0|\alpha)} = 1\,.
+$$</div>
+<p>
+The log-posterior for <span class="math">\(\alpha\)</span> given the data <span class="math">\(D\equiv\left\{m_i\right\}_{i=1}^{N}\)</span> then reads
+</p>
+<div class="math">$$
+\label{app:eq:log-post1}
+\log{p(\alpha|D)} = \mbox{const} -N\log{\mathcal{F}} + \sum\limits_{i=1}^N{\log{f(m_i)}} = \mbox{const} -N\log{A(\alpha,M_1,M_2)} - \alpha\sum\limits_{i=1}^N{\log{m_i}}\,. 
+$$</div>
+<p>I ran the inference for 11 sample sizes, <span class="math">\(N=2, 4, 8,\ldots\,,2048\)</span> (powers of <span class="math">\(2\)</span>), and for 48 realizations of each sample. <a href="#fig1">Figure 1</a> shows the inferred value of <span class="math">\(\alpha\)</span> as a function of the sample size. The shaded regions show inference uncertainties. There are two contributions to the uncertainties: (i) from running the inference on a single realization, and (ii) due to the finite size of the population samples. In the left panel, posterior samples from all the realizations for a given <span class="math">\(N\)</span> are combined, and their median (blue line) and the <span class="math">\(16\)</span>th- and <span class="math">\(84\)</span>th-percentile quantiles (shaded region) are calculated. In the right panel, the median and quantiles are calculated for the posterior samples of each <em>individual</em> realization. Then, ''second-order'' medians and quantiles are computed across realizations. These realization-level quantiles are depicted in blue (the median and its uncertainty over realizations), orange (<span class="math">\(16\)</span>th-percentile quantile), and green (<span class="math">\(84\)</span>th-percentile quantile). <a href="#fig2">Figure 2</a> shows the histograms of posterior samples from a few realizations of <span class="math">\(N=128\)</span> as well as the combined histogram.</p>
+<figure id="fig1">
+<img src="../no_errors_alpha=1.3_nreals=48.png" style="display: block; margin: 0 auto; width: 100%; max-width: 100%;"/>
+<figcaption>Figure 1: Inferred values of the exponent vs. Sample size for the case of vanishing individual uncertainties. The shaded regions represent inference uncertainties, and the horizontal dashed line indicates the fiducial value. See the text for more details.</figcaption>
+</figure>
+
+<figure id="fig2">
+<img src="../hist_no_errors_alpha=1.3_nreals=48.png" style="display: block; margin: 0 auto; width: 50%; max-width: 50%;"/>
+<figcaption>Figure 2: Posterior samples from different realizations (lighter histograms in various colors) and the combined posterior samples (red).</figcaption>
+</figure>
+
+<h1>Log-normal uncertainties</h1>
+<p>Here I assume that the measured value <span class="math">\(m\)</span> of a mass randomly deviates from its true value <span class="math">\(m_0\)</span>, with the likelihood given by a log-normal distribution:
+</p>
+<div class="math">$$
+\begin{align}
+p\left(\log{m}\vert\log{m_0}\right)&amp;\equiv\frac{{\rm d}{(\log{N})}}{{\rm d}{(\log{m})}} = \frac{1}{\sqrt{2\pi\sigma^2}}\exp{\left(-\frac{(\log{m}-\log{m_0})^2}{2\sigma^2}\right)}\,, \\
+p\left(m\vert m_0\right) &amp;\equiv\frac{{\rm d}{(\log{N})}}{{\rm d}{m}} = m^{-1}p\left(\log{m}\vert\log{m_0}\right)\,.
+\end{align}
+$$</div>
+<p>
+The probability for a mass <span class="math">\(m_0\)</span> to be detected is then
+</p>
+<div class="math">$$
+\begin{align}
+p(D_\uparrow|m_0) &amp;= \int\limits_{\log M_1}^{\log M_2}{\frac{{\rm d}{(\log{N})}}{{\rm d}{(\log{m})}}\,{\rm d}{(\log m)}} \nonumber \\
+&amp;=\frac{1}{\sqrt{2\pi\sigma^2}}\int\limits_{y_1}^{y_2}{e^{-(y-y_0)^2/2\sigma^2}{\rm d}{y}} = \frac 12\left[{\rm erf\,}{\left(\frac{y_2-y_0}{\sigma\sqrt{2}}\right)} - {\rm erf\,}{\left(\frac{y_1-y_0}{\sigma\sqrt{2}}\right)}\right]\,,
+\end{align}
+$$</div>
+<p>
+where <span class="math">\(y\equiv \log{m}\)</span> (correspondingly, <span class="math">\(y_1=\log{m_1}\)</span>, etc.), and the definition for the error function
+</p>
+<div class="math">$$
+{\rm erf\,}z = \frac{2}{\sqrt{\pi}}\int\limits_0^z{e^{-t^2}{\rm d}{t}}\,.
+$$</div>
+<p>The effective mass distribution is then obtained by convolving the log-normal distribution with <span class="math">\(f(m)\)</span>:
+</p>
+<div class="math">$$
+\begin{align}
+\widetilde{f}(m') &amp;= \int\limits_0^{+\infty}{p\left(m'\vert m\right)f\left(m\vert\alpha\right){\rm d}{m}} \nonumber \\
+&amp;= \frac{1}{m'}\int\limits_{-\infty}^{+\infty}{p\left(y'\vert y\right)f\left(e^{y}\vert\alpha\right)e^{y}{\rm d}{y}} = \frac{1}{m'} \int\limits_{y_1}^{y_2}{\frac{e^{-\frac{(y-y')^2}{2\sigma^2}}}{\sqrt{2\pi\sigma^2}}\frac{e^{-(\alpha-1)y}}{A(\alpha)}{\rm d}{y}} \nonumber \\
+&amp;= f(m')\times\frac 12e^{\delta^2}\left[{\rm erf\,}{\left(\frac{y_2-y'}{\sigma\sqrt{2}} + \delta\right)}-{\rm erf\,}{\left(\frac{y_1-y' }{\sigma\sqrt{2}} + \delta\right)}\right]\,, \qquad \delta\equiv \frac{\sigma(\alpha-1)}{\sqrt{2}}\,.
+\end{align}
+$$</div>
+<p>
+Note that, from the above definition, it automatically follows that
+</p>
+<div class="math">$$
+\int\limits_0^{+\infty}{\widetilde{f}(m')\,{\rm d}{m'}} = \int\limits_{-\infty}^{+\infty}{{\rm d}{y'}\,\frac{e^{-\frac{(y-y')^2}{2\sigma^2}}}{\sqrt{2\pi\sigma^2}}\int\limits_{y_1}^{y_2}{\rm d}{y}\,\frac{e^{-(\alpha-1)y}}{A(\alpha)}} = 1\times 1 = 1\,.
+$$</div>
+<p>Then, the fraction of observed masses (with the cutoffs <span class="math">\(y_1\)</span> and <span class="math">\(y_2\)</span> playing the role of a selection effect) reads
+</p>
+<div class="math">$$
+\begin{align}
+\widetilde{\mathcal{F}}=\int\limits_{M_1}^{M_2}{\widetilde{f}(m')\,{\rm d}{m'}}&amp;=\int\limits_{0}^{+\infty}{{\rm d}{m}\,f\left(m\vert\alpha\right)\int\limits_{M_1}^{M_2}{{\rm d}{m'}\,p\left(m'\vert m\right)}} \nonumber \\
+&amp;\equiv \int\limits_{M_1}^{M_2}{{\rm d}{m}\,f\left(m\vert\alpha\right)p\left(D_\uparrow\vert m\right)} = \frac{1}{2A}\int\limits_{y_1}^{y_2}{{\rm d}{y}\,e^{-(\alpha-1)y}\left[{\rm erf\,}{\left(\frac{y_2-y}{\sigma\sqrt{2}}\right)} - {\rm erf\,}{\left(\frac{y_1-y}{\sigma\sqrt{2}}\right)}\right]} \nonumber \\
+&amp;=\frac 12{\rm erf\,}{\Delta y_\sigma} \nonumber \\
+&amp;+ \frac{e^{\delta^2}}{2(\alpha-1)A}\left\{e^{-(\alpha-1)y_1}\left[{\rm erf\,}{\left(\Delta y_\sigma + \delta\right)} - {\rm erf\,}{\delta}\right] - e^{-(\alpha-1)y_2}\left[{\rm erf\,}{\left(\Delta y_\sigma - \delta\right)}+{\rm erf\,}{\delta}\right]\right\}\,, \nonumber \\
+&amp;{}
+\end{align}
+$$</div>
+<p>
+where
+</p>
+<div class="math">$$
+\Delta y_\sigma \equiv \frac{y_2-y_1}{\sigma\sqrt{2}}\,.
+$$</div>
+<p>And again, I ran the inference for 11 sample sizes, <span class="math">\(N=2, 4, 8,\ldots\,,2048\)</span> (powers of <span class="math">\(2\)</span>), with 48 realizations of each, using <span class="math">\(\sigma=0.5\)</span> and the hierarchical log-posterior
+</p>
+<div class="math">$$
+\log{p(\alpha|D)} = \mbox{const} -N\log{\widetilde{\mathcal{F}}} + \sum\limits_{i=1}^N{\log{\widetilde{f}(m_i)}}\,.
+$$</div>
+<p>
+<a href="#fig3">Figure 3</a> shows the results. For the figure description, see the end of the previous section.</p>
+<figure id="fig3">
+<img src="../errors_alpha=1.3_nreals=48.png" style="display: block; margin: 0 auto; width: 100%; max-width: 100%;"/>
+<figcaption>Figure 3: Inferred values of the exponent vs. Sample size for the case of log-normal individual uncertainties. The shaded regions represent inference uncertainties, and the horizontal dashed line indicates the fiducial value. See the text for more details.</figcaption>
+</figure>
+
+<h1>Concluding remarks</h1>
+<p>It may seem counterintuitive that <a href="#fig1">Figure 1</a> and <a href="#fig3">Figure 3</a> show similar levels of uncertainty at each given sample size. In the second case, I assumed that individual masses have a log-uncertainty <span class="math">\(\sigma=0.5\)</span> which translates to roughly <span class="math">\(50\%\)</span> relative uncertainty. However, even such a large uncertainty in individual masses does not significantly affect the power-law shape of the fiducial distribution <span class="math">\(f(m)\)</span>. For masses well within the range <span class="math">\([M_1,M_2]\)</span>, the effective PDF <span class="math">\(\widetilde{f}(m)\)</span> only changes its amplitude but retains its power-law slope. Indeed, the logarithmic length of the mass range is 3 dex (i.e., three orders of magnitude between <span class="math">\(M_1=10^2M_\odot\)</span> and <span class="math">\(M_2=10^5M_\odot\)</span>), whereas the width of the individual likelihood is <span class="math">\(\sigma/\log 10\approx 0.2\;\mbox{dex}\)</span>. This is why individual uncertainties begin to affect the shape of the PDF only when the corresponding masses approach the boundaries of the mass range. Therefore, we should not expect <a href="#fig3">Figure 3</a> to differ much from <a href="#fig1">Figure 1</a>, especially since the machinery of hierarchical Bayesian inference consistently incorporates individual uncertainties. On the other hand, a high <span class="math">\(\sigma\)</span> will likely have a stronger effect on the inference uncertainty of <span class="math">\(M_1\)</span> and <span class="math">\(M_2\)</span>, should we include them in the list of hyperparameters to be inferred, rather than assuming they are known.</p>
+<p>This last statement applies to a hypothetical situation where the mass boundaries are assumed to be physical, i.e., no masses exist outside the mass range under consideration. More realistically, there <em>are</em> masses smaller than <span class="math">\(M_1\)</span> and/or larger than <span class="math">\(M_2\)</span>, but we introduce the cutoffs as a kind of selection effect.  To illustrate this, consider masses only within a smaller mass range <span class="math">\([M_1^\prime,M_2^\prime]\)</span>, <span class="math">\(M_1&lt;M_1^\prime&lt;M_2^\prime&lt;M_2\)</span>, while drawing samples from the original population. With the probability of detection being (no individual uncertainties)
+</p>
+<div class="math">$$
+p\left(D_\uparrow|m_0\right) = \left\{
+\begin{array}{ll}
+1\,, &amp; M_1^\prime\leq m_0\leq M_2^\prime\,, \\
+0\,, &amp; \mbox{otherwise},
+\end{array}
+\right.
+$$</div>
+<p>
+the fraction of observed masses reads
+</p>
+<div class="math">$$
+\mathcal{F}^\prime = \int\limits_{M_1^\prime}^{M_2^\prime}{{\rm d}{m}\,f(m)} = \frac{A(\alpha,M_1^\prime,M_2^\prime)}{A(\alpha,M_1,M_2)}\,,
+$$</div>
+<p>
+and the log-posterior
+</p>
+<div class="math">$$
+\begin{align}
+\log{p(\alpha|D')} &amp;= \mbox{const} -N'\log{\mathcal{F}'} + \sum\limits_{i=1}^{N'}{\log{f(m_i)}} \\
+&amp;= \mbox{const} -N'\log{A(\alpha,M_1^\prime,M_2^\prime)} - \alpha\sum\limits_{i=1}^{N'}{\log{m_i}}\,, 
+\end{align}
+$$</div>
+<p>
+where we only include those <span class="math">\(N'\)</span> masses that are in the range <span class="math">\([M_1^\prime,M_2^\prime]\)</span>. This formula is the same as for the wider range but with substitutions <span class="math">\(M_1\to M_1^\prime\)</span>, <span class="math">\(M_2\to M_2^\prime\)</span>.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        </article></aside><!-- /#featured -->
+                <br><br>
+                <h1>Other articles</h1>
+                <hr />
+                    <ol id="posts-list" class="hfeed">
+        <li><article class="hentry">
+                <header>
+                        <h1><a href="../hello-world.html" rel="bookmark" title="Permalink to Hello, world!">Hello, world!</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2025-01-28T00:00:00-05:00">
                 Tue 28 January 2025
@@ -41,7 +281,9 @@
 <p>In <a href="../category/tests.html">tests</a>. </p>
 </p></footer><!-- /.post-info --><!-- /.post-info -->
                 <p>This is the first post using <a href="https://getpelican.com/">pelican</a>. Although the pelican theme for this blog is called <a href="https://github.com/getpelican/pelican-themes/tree/master/notmyidea-cms">notmyidea-cms</a>, all posts represent my original work if not stated otherwise. I may later modify the theme to make it similar to the style of the <a href="https://cosmovlad.github.io">main page</a>.</p>
-        </article></aside><!-- /#featured -->
+                <a class="readmore" href="../hello-world.html">read more</a>
+                </div><!-- /.entry-content -->
+        </article></li>
 </ol><!-- /#posts-list -->
 </section><!-- /#content -->
 
@@ -49,6 +291,7 @@
                 <div class="widget">
                         <h2>Categories</h2>
                         <ul>
+                           <li ><a href="../category/population-inference.html">population inference</a></li>
                            <li ><a href="../category/tests.html">tests</a></li>
                         </ul>
                 </div>
