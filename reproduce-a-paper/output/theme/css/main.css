@@ -27,6 +27,13 @@ body {
     min-width: 1000px;
 }
 
+code {
+    font-size: 1em;
+    font-family: monospace, monospace;
+    background-color: #f5f5f5;
+    padding: 0.1em 0.3em;
+    border-radius: 4px;
+}
 
 
 /* Headings */

@@ -43,6 +43,8 @@
                 <h1>Paper</h1>
 <p><a target="_blank" rel="noopener noreferrer" href="https://arxiv.org/pdf/1606.04474">"Learning to learn by gradient descent
 by gradient descent"</a> (Andrychowicz et al., 2016)</p>
+<h1>Code</h1>
+<p>See below for a summary of the <a href="https://github.com/CosmoVlad/blog-code/tree/main/reproduce-a-paper/2025-04-20">implementation</a>.</p>
 <h1>Context</h1>
 <p>Fitting models to data constitutes a major part of scientific research. One of the most basic and universal examples is the linear model <span class="math">\(y=mx+b\)</span>, where <span class="math">\(x\)</span> and <span class="math">\(y\)</span> are the independent and dependent variables, respectively, and <span class="math">\(m\)</span> and <span class="math">\(b\)</span> are the model parameters (a.k.a. the slope and intercept). Given a set of <span class="math">\(N\)</span> data points <span class="math">\((x_i, y_i)\)</span>, <span class="math">\(i=1,\ldots\,, N\)</span>, the best-fit values of <span class="math">\(m\)</span> and <span class="math">\(b\)</span> are found through <em>optimization</em>. For example, in the case of negligible uncertainties, this reduces to minimizing the function
 </p>
@@ -66,13 +68,48 @@ until a reasonable approximation of the optimal point is reached. Here, <span cl
 \boldsymbol{\theta}^{(k+1)}  = \boldsymbol{\theta}^{(k)} + \mathbf{g}\left[\phi;\nabla_\boldsymbol{\theta}f\left(\boldsymbol{\theta}^{(k)}\right)\right]\,,
 $$</div>
 <p>
-where <span class="math">\(\mathbf{g}\)</span> represents a single cell of a recurrent neural network (RNN) with parameters <span class="math">\(\phi\)</span>. (Additional update rules for the memory states of the RNN are implied.) Since the gradient of an optimizee (i.e., the function being optimized) is still expected to carry important information, it is passed into the RNN cell as a separate input. The iterative optimization process is thus interpreted as a sequence of the RNN cells which form the RNN. The loss function for training the optimizer itself is given by the sum
+where <span class="math">\(\mathbf{g}\)</span> represents a single cell of a recurrent neural network (RNN) with parameters <span class="math">\(\phi\)</span>. (Additional update rules for the memory states of the RNN are implied.) Since the gradient of an optimizee (i.e., the function being optimized) is still expected to carry important information, it is passed into the RNN cell as a separate input. The iterative optimization process is thus interpreted as a sequence of the cells which form the RNN. The loss function for training the optimizer itself is given by the sum
 </p>
 <div class="math">$$
 \sum\limits_{k=0}^{M}\Vert f\left(\boldsymbol{\theta}^{(k)}\right)\Vert\,,
 $$</div>
 <p>
 where <span class="math">\(M\)</span> is the number of optimization steps.</p>
+<h1>Reproduction</h1>
+<p>I applied the main idea of the paper to two simple optimization problems:</p>
+<ul>
+<li>linear regression without an intercept, <span class="math">\(f(m)=\sum\limits_{i=1}^{N}(mx_i-y_i)^2\)</span> (not considered in the paper),</li>
+<li>quadratic functions <span class="math">\(f(\boldsymbol{\theta})=\left(W\boldsymbol{\theta}-\mathbf{y}\right)^{\rm T}\left(W\boldsymbol{\theta}-\mathbf{y}\right)\)</span>, where <span class="math">\(W\)</span> is a <span class="math">\(10\times 10\)</span> matrix, <span class="math">\(\boldsymbol{\theta}\)</span> is a <span class="math">\(10\times 1\)</span> vector of parameters, and <span class="math">\(\mathbf{y}\)</span> is a <span class="math">\(10\times 1\)</span> vector (Section 3.1 of the paper).</li>
+</ul>
+<p>The optimizees are implemented as Keras custom layers that inherit from <code>keras.Layer</code>. Each optimizee defines two methods: (i) <code>call()</code>, which returns the values of the function being optimized, and (ii) <code>gradient()</code>, which returns the gradient computed using <code>tensorflow.GradientTape()</code>. The constructors of the optimizees also accept an initializer as an argument. The initializers serve two purposes: first, to produce an initial guess for the optimizer; and second, to support data generators &ndash; implemented as subclasses of <code>keras.utils.Sequence</code> &ndash; in generating mock data for training the RNN-based optimizer.</p>
+<p>The optimizers themselves are implemented as Keras custom models that inherit from <code>keras.Model</code>. Conventional optimizers (such as gradient descent, Adam, etc.) are encapsulated in the <code>LocalOptimizer</code> model, while the RNN-based optimizer is implemented as the <code>GlobalOptimizer</code> model. The latter consists of a sequence of RIM blocks (in reference to Recurrent Inference Machines), with each block composed of two LSTM cells with 20 neurons each and using the <code>tanh</code> activation function, followed by a linear <code>Dense</code> layer with a single output. If an optimizee has more than one parameter, the RIM block is applied elementwise.</p>
+<p>The LSTM opimizers for both models were trained using 100 iterations for training, 30 for validation, and 30 for testing ("production"). They were trained over 20 epochs, with 100 steps per epoch, using a batch size of 64, and the Adam optimizer with a learning rate <span class="math">\(0.1\)</span>. The size of both training datasets was <span class="math">\(1024\times 10\)</span> generated with the respective initializers:</p>
+<ul>
+<li>Linear regression: the slope is randomly sampled as <span class="math">\(m=\tan^{-1}{\beta}\)</span>, where <span class="math">\(\alpha\)</span> is sampled uniformly from the interval <span class="math">\([-(\pi/2-\epsilon), \pi/2-\epsilon]\)</span> (I used <span class="math">\(\epsilon=0.1\)</span>),</li>
+<li>Quadratic functions: the elements of both <span class="math">\(W\)</span> and <span class="math">\(\mathbf{y}\)</span> are sample from the standard normal distribution.</li>
+</ul>
+<h1>Benchmarks</h1>
+<h2>Linear regression</h2>
+<p>I used the following dataset:
+</p>
+<div class="math">$$
+x\in{3.46, 3.42, 3.24, 1.05, 0.31, 3.79, 2.46, 0.01, 3.64, 3.94}\,,
+$$</div>
+<div class="math">$$
+y\in{7.35, 6.49, 6.24, 2.81, 1.32, 7.08, 4.54, -1.79, 8.96, 7.65}\,,
+$$</div>
+<p>
+wuth the analytical optimal value of the slope being <span class="math">\(m_{\rm opt}\approx 2.0341\)</span>. The GD with a learning rate <span class="math">\(\alpha=0.01\)</span> and 30 iterations gives the same value for the same floating point precision. The value inferred by the LSTM optimizer is <span class="math">\(m\approx 2.0340\)</span>, which deviates from the analytical value by <span class="math">\(10^{-4}\)</span>. The comparison between the LSTM optimizer and some of the conventional optimizers is shown in the figure below. It appears that, for this particular optimization problem, GD is the best of the conventional optimizers, and the LSTM optimizer was trained to be as efficient.</p>
+<figure id="fig1">
+<img src="../linear_optimizees.png" style="display: block; margin: 0 auto; width: 70%; max-width: 70%;"/>
+<figcaption>Figure 1: Comparison between the LSTM optimizer and some of the conventional optimizers. The solid lines show the median value of the loss over realizations of the initial guess.</figcaption>
+</figure>
+
+<figure id="fig2">
+<img src="../quadratic_optimizees.png" style="display: block; margin: 0 auto; width: 70%; max-width: 70%;"/>
+<figcaption>Figure 2: Comparison between the LSTM optimizer and some of the conventional optimizers. The solid lines show the median value of the loss over realizations of the initial guess.</figcaption>
+</figure>
+
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
