@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <title>Blog</title>
+        <title>Reproduce-a-Paper</title>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="./theme/css/main.css" type="text/css" />
-        <link href="./" type="application/atom+xml" rel="alternate" title="Blog ATOM Feed" />
+        <link href="./" type="application/atom+xml" rel="alternate" title="Reproduce-a-Paper ATOM Feed" />
 
 
         <!--[if IE]>
@@ -21,7 +21,7 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="./index.html">Blog </a></h1>
+                <h1><a href="./index.html">Reproduce-a-Paper </a></h1>
                 <nav><ul>
                 <li><a href="./">Archives</a></li>
                 </ul></nav>
@@ -29,7 +29,122 @@
 
      <section id="content" class="body">
         <aside id="featured"><article>
-                <h1 class="entry-title"><a href="./hello-world.html">Hello, world!</a></h1>
+                <h1 class="entry-title"><a href="./training-an-optimizer.html">Training an optimizer</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2025-04-20T00:00:00-04:00">
+                Sun 20 April 2025
+        </abbr>
+
+        <address class="vcard author">
+                By <a class="url fn" href="./author/vladimir-strokov.html">Vladimir Strokov</a>
+        </address>
+<p>In <a href="./category/machine-learning.html">machine learning</a>. </p>
+</p></footer><!-- /.post-info --><!-- /.post-info -->
+                <h1>Paper</h1>
+<p><a target="_blank" rel="noopener noreferrer" href="https://arxiv.org/pdf/1606.04474">"Learning to learn by gradient descent
+by gradient descent"</a> (Andrychowicz et al., 2016)</p>
+<h1>Context</h1>
+<p>Fitting models to data constitutes a major part of scientific research. One of the most basic and universal examples is the linear model <span class="math">\(y=mx+b\)</span>, where <span class="math">\(x\)</span> and <span class="math">\(y\)</span> are the independent and dependent variables, respectively, and <span class="math">\(m\)</span> and <span class="math">\(b\)</span> are the model parameters (a.k.a. the slope and intercept). Given a set of <span class="math">\(N\)</span> data points <span class="math">\((x_i, y_i)\)</span>, <span class="math">\(i=1,\ldots\,, N\)</span>, the best-fit values of <span class="math">\(m\)</span> and <span class="math">\(b\)</span> are found through <em>optimization</em>. For example, in the case of negligible uncertainties, this reduces to minimizing the function
+</p>
+<div class="math">$$
+f(\boldsymbol{\theta})=\sum\limits_{i=1}^{N}\left(mx_i+b-y_i\right)^2\,,
+$$</div>
+<p>
+where <span class="math">\(\boldsymbol{\theta}={m,b}\)</span> is the set of parameters.</p>
+<p>For this simple function, it is easy to find the best-fit values of the slope and intercept analytically. However, this is often not the case for more complex functions, and the optimization must be performed numerically. One of the classical numerical techniques is <em>gradient descent (GD)</em>, which starts with an initial guess <span class="math">\(\boldsymbol{\theta}^{(0)}\)</span> and iteratively applies the update rule
+</p>
+<div class="math">$$
+\boldsymbol{\theta}^{(k+1)}  = \boldsymbol{\theta}^{(k)} - \alpha\nabla_\boldsymbol{\theta}f\left(\boldsymbol{\theta}^{(k)}\right)
+$$</div>
+<p>
+until a reasonable approximation of the optimal point is reached. Here, <span class="math">\(\alpha\)</span> is a tunable parameter that can be adjusted to achieve faster convergence.</p>
+<p>However, there is no universal algorithm that works equally well for all optimization problems. Training a neural network (NN) is a prime example where altermative optimization algorithms outperform classical GD. In the case of a NN, the function being optimized (<em>the optimizee</em>) is the loss function which quantifies the discrepancy between the networks's predictions and the ground truth.</p>
+<h1>Main idea</h1>
+<p>The Authors suggest delegating the optimization process to another NN -- referred to as <em>the optimizer</em> -- rather than manually designing an effective optimization algorithm. In this approach, the standard update rule is modified as follows:
+</p>
+<div class="math">$$
+\boldsymbol{\theta}^{(k+1)}  = \boldsymbol{\theta}^{(k)} + \mathbf{g}\left[\phi;\nabla_\boldsymbol{\theta}f\left(\boldsymbol{\theta}^{(k)}\right)\right]\,,
+$$</div>
+<p>
+where <span class="math">\(\mathbf{g}\)</span> represents a single cell of a recurrent neural network (RNN) with parameters <span class="math">\(\phi\)</span>. (Additional update rules for the memory states of the RNN are implied.) Since the gradient of an optimizee (i.e., the function being optimized) is still expected to carry important information, it is passed into the RNN cell as a separate input. The iterative optimization process is thus interpreted as a sequence of the RNN cells which form the RNN. The loss function for training the optimizer itself is given by the sum
+</p>
+<div class="math">$$
+\sum\limits_{k=0}^{M}\Vert f\left(\boldsymbol{\theta}^{(k)}\right)\Vert\,,
+$$</div>
+<p>
+where <span class="math">\(M\)</span> is the number of optimization steps.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        </article></aside><!-- /#featured -->
+                <h1>Other articles</h1>
+                <hr />
+                    <ol id="posts-list" class="hfeed">
+        <li><article class="hentry">
+                <header>
+                        <h1><a href="./hello-world.html" rel="bookmark" title="Permalink to Hello, world!">Hello, world!</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2025-01-28T00:00:00-05:00">
                 Tue 28 January 2025
@@ -41,7 +156,9 @@
 <p>In <a href="./category/tests.html">tests</a>. </p>
 </p></footer><!-- /.post-info --><!-- /.post-info -->
                 <p>This is the first post using <a href="https://getpelican.com/">pelican</a>. Although the pelican theme for this blog is called <a href="https://github.com/getpelican/pelican-themes/tree/master/notmyidea-cms">notmyidea-cms</a>, all posts represent my original work if not stated otherwise. I may later modify the theme to make it similar to the style of the <a href="https://cosmovlad.github.io">main page</a>.</p>
-        </article></aside><!-- /#featured -->
+                <a class="readmore" href="./hello-world.html">read more</a>
+                </div><!-- /.entry-content -->
+        </article></li>
 </ol><!-- /#posts-list -->
 </section><!-- /#content -->
 
@@ -49,6 +166,7 @@
                 <div class="widget">
                         <h2>Categories</h2>
                         <ul>
+                           <li ><a href="./category/machine-learning.html">machine learning</a></li>
                            <li ><a href="./category/tests.html">tests</a></li>
                         </ul>
                 </div>
