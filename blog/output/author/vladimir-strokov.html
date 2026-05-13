@@ -29,174 +29,71 @@
 
      <section id="content" class="body">
         <aside id="featured"><article>
-                <h1 class="entry-title"><a href="../inferring-the-shape-of-a-mass-distribution.html">Inferring the shape of a mass distribution</a></h1>
+                <h1 class="entry-title"><a href="../how-much-to-save-for-a-comfortable-retirement.html">How much to save for a comfortable retirement?</a></h1>
 <footer class="post-info">
-        <abbr class="published" title="2025-02-13T00:00:00-05:00">
-                Thu 13 February 2025
+        <abbr class="published" title="2025-05-18T00:00:00-04:00">
+                Sun 18 May 2025
         </abbr>
 
         <address class="vcard author">
                 By <a class="url fn" href="../author/vladimir-strokov.html">Vladimir Strokov</a>
         </address>
-<p>In <a href="../category/population-inference.html">population inference</a>. </p>
+<p>In <a href="../category/personal-finance.html">personal finance</a>. </p>
 </p></footer><!-- /.post-info --><!-- /.post-info -->
-                <h1>Introduction</h1>
-<p><em>Population inference</em>, or <em>hierarchical inference</em>, is a class of inference problems where we want to constrain the (hyper)parameters of a theoretical distribution given a set of samples from that distribution. For example, consider the prices of a product in different stores. From theoretical considerations, we might expect that these prices follow a Gaussian distribution with some mean and standard deviation. Given the observed prices from various stores (samples), we can then try to infer the mean and standard deviation (hyperparameters). However, we must also keep in mind that we cannot always record all the samples we would like. For instance, smaller stores may not publish their price statistics, or we might not even be aware of those stores. This is referred to as <em>selection bias</em>, or <em>selection effects</em>. For consistent inference, we must be able to quantify the fraction of samples that fall through the cracks.</p>
-<p>In astrophysics, one of the fundamental properties of stars, galaxies, and other celestial objects is their mass. The shape of the mass distribution in an astrophysical population (e.g., stars) can provide valuable insights into that population. In this post, I summarize the inference process (see <a href="https://github.com/CosmoVlad/blog-code/tree/main/blog/2025-02-12">full code</a>) for a simple mass distribution that follows a power law within a specific mass range:
-</p>
-<div class="math">$$
-f(m) = \frac{m^{-\alpha}}{A(\alpha, M_1, M_2)}\,, \qquad M_1\leq m\leq M_2\,,
-$$</div>
-<p>
-where <span class="math">\(A\)</span> is the normalization constant. Namely, assuming that the bounds <span class="math">\(M_1\)</span> and <span class="math">\(M_2\)</span> are known, let us infer <span class="math">\(\alpha\)</span> given a sample <span class="math">\(\left\{m_i\right\}_{i=1}^{N}\)</span> of <span class="math">\(N\)</span> masses from this distribution. Below I consider two cases:</p>
+                <p>Retirement is often called the golden years, but whether they’ll be golden or just be there depends on how much you save regularly and for how long. In this post, I want to write down a retirement savings calculation based on a specific set of assumptions, starting with the premise that both earnings and retirement take place in the U.S.</p>
+<p>Let’s list the key ingredients of the calculation:</p>
 <ol>
-<li>each mass in the sample is measured perfectly,</li>
-<li>there are individual measurement uncertainties described by log-normal probability distribution functions (PDF) centered at the true value of each mass.</li>
-</ol>
-<p>On the technical side, I use the following techniques:</p>
+<li>
+<p><strong>Family Status</strong><br>
+   To ensure that, in retirement, we rely on others as little as possible, this calculation will focus on <strong>single individuals</strong>.</p>
+</li>
+<li>
+<p><strong>Net Retirement Income</strong><br>
+   Unlike most online retirement calculations, I’ll use <strong>net income</strong> (after taxes) because it’s more realistic and reflects the amount you can actually spend. Personally, I prefer income figures that represent take-home pay.<br>
+   For a realistic number, consider that in retirement, ideally, you won’t need to work and can choose to live in a lower cost-of-living (COL) area. According to the U.S. Census Bureau (<a href="https://www2.census.gov/library/publications/2024/demo/p60-282.pdf">Guzman and Kollar, 2023</a>), the median post-tax income for individuals aged 65 and older was 49,510 (USD) in 2022 and 51,400 in 2023. For simplicity, let’s assume a target of <strong>$50,000</strong>. The numbers cited are in (approximately) today’s dollars, which is why we’ll need to adjust them for inflation (see below).</p>
+</li>
+<li>
+<p><strong>Where to Keep the Retirement Savings?</strong><br>
+   In the U.S., there are specialized retirement accounts like 401(k), IRA, and Roth IRA. Although they offer tax advantages, they also come with limitations. For example, these accounts have annual contribution limits (especially low for IRAs) and penalties for early withdrawals (typically before age 59½).<br>
+   To keep things flexible, I’ll assume savings are held in a <strong>brokerage account</strong>, with investments tied to the <strong>S&amp;P 500 index</strong>. Regarding tax implications, we’ll pay taxes on capital gains (the "profit" we earn from investing). In 2025, the tax brackets for those filing as single are as follows (note: these amounts are are to be adjusted for inflation):  </p>
 <ul>
-<li>hierarchical Bayesian inference with selection effects; see, for example, <a href="https://arxiv.org/pdf/2007.05579">Vitale et al. (2022)</a> (especially, Section 6 for a specific example).</li>
-<li>Markov chain Monte Carlo; see, for example, <a href="https://arxiv.org/pdf/1710.06068">Hogg and Foreman-Mackey (2017)</a>.</li>
-<li>sampling from a distribution with a known CDF (cumulative distribution function); namely, the CDF for the mass distribution above is
-<div class="math">$$
-F(m) = \int\limits_{M_1}^{m}{{\rm d}m'\,f(m')}\,.
-$$</div>
-To draw a sample from it, one generates a uniformly random number <span class="math">\(r\)</span>, <span class="math">\(0\leq r\leq 1\)</span>, and then inverts the equation <span class="math">\(F(m)=r\)</span> to get the mass sample.</li>
+<li>0% for 0&ndash;48,350 USD,  </li>
+<li>15% for 48,351&ndash;533,400 USD,  </li>
+<li>20% for 533,401 and above.<br>
+   In principle, it’s also possible to account for the standard deduction ($15,000 for single filers in 2025), but since I’m not certain if it applies in this specific retirement scenario, I’ll assume no additional deductions. This will provide a more conservative estimate of retirement savings. Also, note that the upper end of the first bracket is very close to our assumed net retirement income of $50,000. If we can keep our income within the 0% bracket, our <strong>gross</strong> and <strong>net</strong> income would be the same, as there would be no taxes on capital gains. I plan to look at the potential benefits of reducing our net income to $48,350 to stay within the 0% tax bracket in a follow-up post.</li>
 </ul>
-<h1>No measurement uncertainties</h1>
-<p>A starting point for the hierarchical inference is the log-posterior
-</p>
-<div class="math">$$
-\log{p(\alpha|D)} = \mbox{const} -N\log{\mathcal{F}} + \sum\limits_{i=1}^N{\log{\widetilde{f}(m_i)}}\,,
-$$</div>
-<p>
-where <span class="math">\(\mathcal{F}=\mathcal{F}(\alpha)\)</span> is the fraction of observed masses and <span class="math">\(\widetilde{f}(m)\)</span> is the effective mass distribution corrected for the uncertainties of individual events. In the ideal case of vanishing uncertainties, <span class="math">\(\widetilde{f}(m)=f(m)\)</span>. The fraction <span class="math">\(\mathcal{F}\)</span> quantifies potential selection effects and is defined as
-</p>
-<div class="math">$$
-\mathcal{F}(\alpha) = \int\limits_{M_1}^{M_2}{{\rm d}m_0\,f(m_0|\alpha)p(D_\uparrow|m_0)}\,,
-$$</div>
-<p>
-where <span class="math">\(p(D_\uparrow|m_0)\)</span> is the probability to detect a mass <span class="math">\(m_0\)</span>. </p>
-<p>In this ideal case, the probability of detecting a mass in the range <span class="math">\([M_1,M_2]\)</span> is unity, and, therefore,
-</p>
-<div class="math">$$
-\mathcal{F}(\alpha) = \int\limits_{M_1}^{M_2}{{\rm d}{m_0}\,f(m_0|\alpha)} = 1\,.
-$$</div>
-<p>
-The log-posterior for <span class="math">\(\alpha\)</span> given the data <span class="math">\(D\equiv\left\{m_i\right\}_{i=1}^{N}\)</span> then reads
-</p>
-<div class="math">$$
-\label{app:eq:log-post1}
-\log{p(\alpha|D)} = \mbox{const} -N\log{\mathcal{F}} + \sum\limits_{i=1}^N{\log{f(m_i)}} = \mbox{const} -N\log{A(\alpha,M_1,M_2)} - \alpha\sum\limits_{i=1}^N{\log{m_i}}\,. 
-$$</div>
-<p>I ran the inference for 11 sample sizes, <span class="math">\(N=2, 4, 8,\ldots\,,2048\)</span> (powers of <span class="math">\(2\)</span>), and for 48 realizations of each sample. <a href="#fig1">Figure 1</a> shows the inferred value of <span class="math">\(\alpha\)</span> as a function of the sample size. The shaded regions show inference uncertainties. There are two contributions to the uncertainties: (i) from running the inference on a single realization, and (ii) due to the finite size of the population samples. In the left panel, posterior samples from all the realizations for a given <span class="math">\(N\)</span> are combined, and their median (blue line) and the <span class="math">\(16\)</span>th- and <span class="math">\(84\)</span>th-percentile quantiles (shaded region) are calculated. In the right panel, the median and quantiles are calculated for the posterior samples of each <em>individual</em> realization. Then, ''second-order'' medians and quantiles are computed across realizations. These realization-level quantiles are depicted in blue (the median and its uncertainty over realizations), orange (<span class="math">\(16\)</span>th-percentile quantile), and green (<span class="math">\(84\)</span>th-percentile quantile). <a href="#fig2">Figure 2</a> shows the histograms of posterior samples from a few realizations of <span class="math">\(N=128\)</span> as well as the combined histogram.</p>
+</li>
+<li>
+<p><strong>Inflation</strong><br>
+   The numbers for retirement income and tax brackets we’re assuming are in <strong>today’s dollars</strong>. A specific number is, in fact, a proxy for the level of financial freedom we’d like to have. This means we’ll need to adjust these numbers for inflation. We’ll assume that both income and tax brackets are adjusted at the same rate of inflation.</p>
+</li>
+<li>
+<p><strong>Duration of Retirement.</strong><br>
+   We'll assume the canonical <strong>4% rule</strong>, meaning we'll plan to withdraw 4% of our retirement savings each year. With this approach, our savings will last approximately 25 years, although the actual duration may be somewhat longer if the savings continue to grow in the brokerage account.</p>
+</li>
+</ol>
+<h1>Simple Estimates</h1>
+<p>Let us first estimate the required savings assuming average rates of inflation and growth. For inflation, we'll use <a href="https://www.bls.gov/data/">Consumer Price Index (CPI) data</a> from the U.S. Bureau of Labor Statistics. This is monthly data for all urban consumers (CPI-U) and all items. For the S&amp;P500, we'll use a table that tracks the growth of 100 USD invested in 1965, as quoted by the <a href="https://www.officialdata.org/us/stocks/s-p-500/1965">Official Data Foundation</a>. </p>
+<p><a href="#fig1">Figure 1</a> shows the monthly inflation (left) and growth (right) rates averaged backward in time. The averaging is performed by considering the growth over the previous <span class="math">\(N\)</span> months (starting today) and assuming that the value changed by <span class="math">\((1+r/100)^N\)</span>, where <span class="math">\(r (\%)\)</span> is the average monthly rate. The wild fluctuations of the S&amp;P500 rate in the recent months emphasize the importance of long-term investments spanning multiple years. These graphs also show that, on a timescale longer than <span class="math">\(\approx 10\)</span> years, the S&amp;P500 grows at <span class="math">\(\approx 1\%/\mbox{mo}\)</span>, compensating for the inflation, which occurs at <span class="math">\(\approx 0.3\%/\mbox{mo}\)</span>.</p>
 <figure id="fig1">
-<img src="../no_errors_alpha=1.3_nreals=48.png" style="display: block; margin: 0 auto; width: 100%; max-width: 100%;"/>
-<figcaption>Figure 1: Inferred values of the exponent vs. Sample size for the case of vanishing individual uncertainties. The shaded regions represent inference uncertainties, and the horizontal dashed line indicates the fiducial value. See the text for more details.</figcaption>
+<img src="../rates.png" style="display: block; margin: 0 auto; width: 90%; max-width: 90%;"/>
+<figcaption>Figure 1: Average monthly rates of inflation (left) and S&P500 growth (right).</figcaption>
 </figure>
 
-<figure id="fig2">
-<img src="../hist_no_errors_alpha=1.3_nreals=48.png" style="display: block; margin: 0 auto; width: 50%; max-width: 50%;"/>
-<figcaption>Figure 2: Posterior samples from different realizations (lighter histograms in various colors) and the combined posterior samples (red).</figcaption>
-</figure>
-
-<h1>Log-normal uncertainties</h1>
-<p>Here I assume that the measured value <span class="math">\(m\)</span> of a mass randomly deviates from its true value <span class="math">\(m_0\)</span>, with the likelihood given by a log-normal distribution:
+<p>With a monthly inflation rate of <span class="math">\(0.3\%\)</span>, in twenty years, today's 50,000 will turn into <span class="math">\(50000\times (1+0.003)^{20\times 12}\approx 102600\)</span> USD. Using the 4\% rule, we'll need <span class="math">\(S=25\times 102600\approx 2,500,000\)</span> (two and a half million dollars!) of retirement savings. Investing in the S&amp;P500 that grows at 1\% per month, we'll have to save
 </p>
 <div class="math">$$
-\begin{align}
-p\left(\log{m}\vert\log{m_0}\right)&amp;\equiv\frac{{\rm d}{(\log{N})}}{{\rm d}{(\log{m})}} = \frac{1}{\sqrt{2\pi\sigma^2}}\exp{\left(-\frac{(\log{m}-\log{m_0})^2}{2\sigma^2}\right)}\,, \\
-p\left(m\vert m_0\right) &amp;\equiv\frac{{\rm d}{(\log{N})}}{{\rm d}{m}} = m^{-1}p\left(\log{m}\vert\log{m_0}\right)\,.
-\end{align}
+x = \frac{S}{1+q}\frac{q}{(1+q)^N - 1},
 $$</div>
 <p>
-The probability for a mass <span class="math">\(m_0\)</span> to be detected is then
+where <span class="math">\(q\)</span> is the growth rate, and <span class="math">\(N\)</span> is the number of contributions. Substituting <span class="math">\(q\approx 0.01\)</span> and <span class="math">\(N=12\times 20=240\)</span>, we get <span class="math">\(x\approx 2,560\)</span> USD. This is the amount we'll need to save monthly if we want to enjoy 50,000 USD every year in 20 years. So far, we haven't taken taxes into account. To estimate what part of the adjusted monthly amount <span class="math">\(102,600\)</span> is taxable, we can assume that capital gains are uniformly distributed between our S&amp;P500 shares. The capital gains
 </p>
 <div class="math">$$
-\begin{align}
-p(D_\uparrow|m_0) &amp;= \int\limits_{\log M_1}^{\log M_2}{\frac{{\rm d}{(\log{N})}}{{\rm d}{(\log{m})}}\,{\rm d}{(\log m)}} \nonumber \\
-&amp;=\frac{1}{\sqrt{2\pi\sigma^2}}\int\limits_{y_1}^{y_2}{e^{-(y-y_0)^2/2\sigma^2}{\rm d}{y}} = \frac 12\left[{\rm erf\,}{\left(\frac{y_2-y_0}{\sigma\sqrt{2}}\right)} - {\rm erf\,}{\left(\frac{y_1-y_0}{\sigma\sqrt{2}}\right)}\right]\,,
-\end{align}
+g = S - Nx \approx 1,950,000,
 $$</div>
 <p>
-where <span class="math">\(y\equiv \log{m}\)</span> (correspondingly, <span class="math">\(y_1=\log{m_1}\)</span>, etc.), and the definition for the error function
-</p>
-<div class="math">$$
-{\rm erf\,}z = \frac{2}{\sqrt{\pi}}\int\limits_0^z{e^{-t^2}{\rm d}{t}}\,.
-$$</div>
-<p>The effective mass distribution is then obtained by convolving the log-normal distribution with <span class="math">\(f(m)\)</span>:
-</p>
-<div class="math">$$
-\begin{align}
-\widetilde{f}(m') &amp;= \int\limits_0^{+\infty}{p\left(m'\vert m\right)f\left(m\vert\alpha\right){\rm d}{m}} \nonumber \\
-&amp;= \frac{1}{m'}\int\limits_{-\infty}^{+\infty}{p\left(y'\vert y\right)f\left(e^{y}\vert\alpha\right)e^{y}{\rm d}{y}} = \frac{1}{m'} \int\limits_{y_1}^{y_2}{\frac{e^{-\frac{(y-y')^2}{2\sigma^2}}}{\sqrt{2\pi\sigma^2}}\frac{e^{-(\alpha-1)y}}{A(\alpha)}{\rm d}{y}} \nonumber \\
-&amp;= f(m')\times\frac 12e^{\delta^2}\left[{\rm erf\,}{\left(\frac{y_2-y'}{\sigma\sqrt{2}} + \delta\right)}-{\rm erf\,}{\left(\frac{y_1-y' }{\sigma\sqrt{2}} + \delta\right)}\right]\,, \qquad \delta\equiv \frac{\sigma(\alpha-1)}{\sqrt{2}}\,.
-\end{align}
-$$</div>
-<p>
-Note that, from the above definition, it automatically follows that
-</p>
-<div class="math">$$
-\int\limits_0^{+\infty}{\widetilde{f}(m')\,{\rm d}{m'}} = \int\limits_{-\infty}^{+\infty}{{\rm d}{y'}\,\frac{e^{-\frac{(y-y')^2}{2\sigma^2}}}{\sqrt{2\pi\sigma^2}}\int\limits_{y_1}^{y_2}{\rm d}{y}\,\frac{e^{-(\alpha-1)y}}{A(\alpha)}} = 1\times 1 = 1\,.
-$$</div>
-<p>Then, the fraction of observed masses (with the cutoffs <span class="math">\(y_1\)</span> and <span class="math">\(y_2\)</span> playing the role of a selection effect) reads
-</p>
-<div class="math">$$
-\begin{align}
-\widetilde{\mathcal{F}}=\int\limits_{M_1}^{M_2}{\widetilde{f}(m')\,{\rm d}{m'}}&amp;=\int\limits_{0}^{+\infty}{{\rm d}{m}\,f\left(m\vert\alpha\right)\int\limits_{M_1}^{M_2}{{\rm d}{m'}\,p\left(m'\vert m\right)}} \nonumber \\
-&amp;\equiv \int\limits_{M_1}^{M_2}{{\rm d}{m}\,f\left(m\vert\alpha\right)p\left(D_\uparrow\vert m\right)} = \frac{1}{2A}\int\limits_{y_1}^{y_2}{{\rm d}{y}\,e^{-(\alpha-1)y}\left[{\rm erf\,}{\left(\frac{y_2-y}{\sigma\sqrt{2}}\right)} - {\rm erf\,}{\left(\frac{y_1-y}{\sigma\sqrt{2}}\right)}\right]} \nonumber \\
-&amp;=\frac 12{\rm erf\,}{\Delta y_\sigma} \nonumber \\
-&amp;+ \frac{e^{\delta^2}}{2(\alpha-1)A}\left\{e^{-(\alpha-1)y_1}\left[{\rm erf\,}{\left(\Delta y_\sigma + \delta\right)} - {\rm erf\,}{\delta}\right] - e^{-(\alpha-1)y_2}\left[{\rm erf\,}{\left(\Delta y_\sigma - \delta\right)}+{\rm erf\,}{\delta}\right]\right\}\,, \nonumber \\
-&amp;{}
-\end{align}
-$$</div>
-<p>
-where
-</p>
-<div class="math">$$
-\Delta y_\sigma \equiv \frac{y_2-y_1}{\sigma\sqrt{2}}\,.
-$$</div>
-<p>And again, I ran the inference for 11 sample sizes, <span class="math">\(N=2, 4, 8,\ldots\,,2048\)</span> (powers of <span class="math">\(2\)</span>), with 48 realizations of each, using <span class="math">\(\sigma=0.5\)</span> and the hierarchical log-posterior
-</p>
-<div class="math">$$
-\log{p(\alpha|D)} = \mbox{const} -N\log{\widetilde{\mathcal{F}}} + \sum\limits_{i=1}^N{\log{\widetilde{f}(m_i)}}\,.
-$$</div>
-<p>
-<a href="#fig3">Figure 3</a> shows the results. For the figure description, see the end of the previous section.</p>
-<figure id="fig3">
-<img src="../errors_alpha=1.3_nreals=48.png" style="display: block; margin: 0 auto; width: 100%; max-width: 100%;"/>
-<figcaption>Figure 3: Inferred values of the exponent vs. Sample size for the case of log-normal individual uncertainties. The shaded regions represent inference uncertainties, and the horizontal dashed line indicates the fiducial value. See the text for more details.</figcaption>
-</figure>
-
-<h1>Concluding remarks</h1>
-<p>It may seem counterintuitive that <a href="#fig1">Figure 1</a> and <a href="#fig3">Figure 3</a> show similar levels of uncertainty at each given sample size. In the second case, I assumed that individual masses have a log-uncertainty <span class="math">\(\sigma=0.5\)</span> which translates to roughly <span class="math">\(50\%\)</span> relative uncertainty. However, even such a large uncertainty in individual masses does not significantly affect the power-law shape of the fiducial distribution <span class="math">\(f(m)\)</span>. For masses well within the range <span class="math">\([M_1,M_2]\)</span>, the effective PDF <span class="math">\(\widetilde{f}(m)\)</span> only changes its amplitude but retains its power-law slope. Indeed, the logarithmic length of the mass range is 3 dex (i.e., three orders of magnitude between <span class="math">\(M_1=10^2M_\odot\)</span> and <span class="math">\(M_2=10^5M_\odot\)</span>), whereas the width of the individual likelihood is <span class="math">\(\sigma/\log 10\approx 0.2\;\mbox{dex}\)</span>. This is why individual uncertainties begin to affect the shape of the PDF only when the corresponding masses approach the boundaries of the mass range. Therefore, we should not expect <a href="#fig3">Figure 3</a> to differ much from <a href="#fig1">Figure 1</a>, especially since the machinery of hierarchical Bayesian inference consistently incorporates individual uncertainties. On the other hand, a high <span class="math">\(\sigma\)</span> will likely have a stronger effect on the inference uncertainty of <span class="math">\(M_1\)</span> and <span class="math">\(M_2\)</span>, should we include them in the list of hyperparameters to be inferred, rather than assuming they are known.</p>
-<p>This last statement applies to a hypothetical situation where the mass boundaries are assumed to be physical, i.e., no masses exist outside the mass range under consideration. More realistically, there <em>are</em> masses smaller than <span class="math">\(M_1\)</span> and/or larger than <span class="math">\(M_2\)</span>, but we introduce the cutoffs as a kind of selection effect.  To illustrate this, consider masses only within a smaller mass range <span class="math">\([M_1^\prime,M_2^\prime]\)</span>, <span class="math">\(M_1&lt;M_1^\prime&lt;M_2^\prime&lt;M_2\)</span>, while drawing samples from the original population. With the probability of detection being (no individual uncertainties)
-</p>
-<div class="math">$$
-p\left(D_\uparrow|m_0\right) = \left\{
-\begin{array}{ll}
-1\,, &amp; M_1^\prime\leq m_0\leq M_2^\prime\,, \\
-0\,, &amp; \mbox{otherwise},
-\end{array}
-\right.
-$$</div>
-<p>
-the fraction of observed masses reads
-</p>
-<div class="math">$$
-\mathcal{F}^\prime = \int\limits_{M_1^\prime}^{M_2^\prime}{{\rm d}{m}\,f(m)} = \frac{A(\alpha,M_1^\prime,M_2^\prime)}{A(\alpha,M_1,M_2)}\,,
-$$</div>
-<p>
-and the log-posterior
-</p>
-<div class="math">$$
-\begin{align}
-\log{p(\alpha|D')} &amp;= \mbox{const} -N'\log{\mathcal{F}'} + \sum\limits_{i=1}^{N'}{\log{f(m_i)}} \\
-&amp;= \mbox{const} -N'\log{A(\alpha,M_1^\prime,M_2^\prime)} - \alpha\sum\limits_{i=1}^{N'}{\log{m_i}}\,, 
-\end{align}
-$$</div>
-<p>
-where we only include those <span class="math">\(N'\)</span> masses that are in the range <span class="math">\([M_1^\prime,M_2^\prime]\)</span>. This formula is the same as for the wider range but with substitutions <span class="math">\(M_1\to M_1^\prime\)</span>, <span class="math">\(M_2\to M_2^\prime\)</span>.</p>
+which constitutes <span class="math">\(\approx 75\%\)</span> of our savings. If we find ourselves in the 15\% tax bracket, our effective tax rate will be <span class="math">\(0.75\times 0.15\times 100\%\approx 11\%\)</span>, which means we'll need to withdraw <span class="math">\(102,600/0.89\approx 115,300\)</span> USD if we want the net income <span class="math">\(102,600\)</span>. Our savings should still last about 25 years, because we'll keep them invested in the S&amp;P500, and hopefully the growth will make up for the taxes.</p>
+<p>To summarize, under the simple assumptions above, saving around <span class="math">\(2,500&ndash;3,000\)</span> USD per month for 20 years in an S&amp;P500-indexed brokerage account should be enough to support a $50,000-per-year (in today's dollars) retirement income for about 25 years. In a future post, I'll revisit this estimate to account for the volatility of inflation and S&amp;P500 returns, and explore whether staying within the 0% capital-gains bracket would meaningfully change the required contribution.</p>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
@@ -266,6 +163,27 @@ where we only include those <span class="math">\(N'\)</span> masses that are in 
                     <ol id="posts-list" class="hfeed">
         <li><article class="hentry">
                 <header>
+                        <h1><a href="../inferring-the-shape-of-a-mass-distribution.html" rel="bookmark" title="Permalink to Inferring the shape of a mass distribution">Inferring the shape of a mass distribution</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2025-02-13T00:00:00-05:00">
+                Thu 13 February 2025
+        </abbr>
+
+        <address class="vcard author">
+                By <a class="url fn" href="../author/vladimir-strokov.html">Vladimir Strokov</a>
+        </address>
+<p>In <a href="../category/population-inference.html">population inference</a>. </p>
+</p></footer><!-- /.post-info --><!-- /.post-info -->
+                <h1>Introduction</h1>
+<p><em>Population inference</em>, or <em>hierarchical inference</em>, is a class of inference problems where we want to constrain the (hyper)parameters of a theoretical distribution given a set of samples from that distribution. For example, consider the prices of a product in different stores. From theoretical considerations, we might expect that …</p>
+                <a class="readmore" href="../inferring-the-shape-of-a-mass-distribution.html">read more</a>
+                </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header>
                         <h1><a href="../hello-world.html" rel="bookmark" title="Permalink to Hello, world!">Hello, world!</a></h1>
                 </header>
 
@@ -280,7 +198,7 @@ where we only include those <span class="math">\(N'\)</span> masses that are in 
         </address>
 <p>In <a href="../category/tests.html">tests</a>. </p>
 </p></footer><!-- /.post-info --><!-- /.post-info -->
-                <p>This is the first post using <a href="https://getpelican.com/">pelican</a>. Although the pelican theme for this blog is called <a href="https://github.com/getpelican/pelican-themes/tree/master/notmyidea-cms">notmyidea-cms</a>, all posts represent my original work if not stated otherwise. I may later modify the theme to make it similar to the style of the <a href="https://cosmovlad.github.io">main page</a>.</p>
+                <p>This is the first post using <a href="https://getpelican.com/">pelican</a>. Although the pelican theme for this blog is called <a href="https://github.com/getpelican/pelican-themes/tree/master/notmyidea-cms">notmyidea-cms</a>, all posts represent my original work if not stated otherwise. I use Claude for grammar check as well as Claude Code for compilation issues with LaTeX, HTML, etc. I may later modify the …</p>
                 <a class="readmore" href="../hello-world.html">read more</a>
                 </div><!-- /.entry-content -->
         </article></li>
@@ -291,6 +209,7 @@ where we only include those <span class="math">\(N'\)</span> masses that are in 
                 <div class="widget">
                         <h2>Categories</h2>
                         <ul>
+                           <li ><a href="../category/personal-finance.html">personal finance</a></li>
                            <li ><a href="../category/population-inference.html">population inference</a></li>
                            <li ><a href="../category/tests.html">tests</a></li>
                         </ul>

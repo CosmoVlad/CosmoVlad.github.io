@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <title>Blog</title>
+        <title>Blog - personal finance</title>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="./theme/css/main.css" type="text/css" />
-        <link href="./" type="application/atom+xml" rel="alternate" title="Blog ATOM Feed" />
+        <link rel="stylesheet" href="../theme/css/main.css" type="text/css" />
+        <link href="../" type="application/atom+xml" rel="alternate" title="Blog ATOM Feed" />
 
 
         <!--[if IE]>
                 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
         <!--[if lte IE 7]>
-                <link rel="stylesheet" type="text/css" media="all" href="./css/ie.css"/>
-                <script src="./js/IE8.js" type="text/javascript"></script><![endif]-->
+                <link rel="stylesheet" type="text/css" media="all" href="../css/ie.css"/>
+                <script src="../js/IE8.js" type="text/javascript"></script><![endif]-->
 
         <!--[if lt IE 7]>
-                <link rel="stylesheet" type="text/css" media="all" href="./css/ie6.css"/><![endif]-->
+                <link rel="stylesheet" type="text/css" media="all" href="../css/ie6.css"/><![endif]-->
 
 </head>
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="./index.html">Blog </a></h1>
+                <h1><a href="../index.html">Blog </a></h1>
                 <nav><ul>
-                <li><a href="./">Archives</a></li>
+                <li><a href="../">Archives</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
      <section id="content" class="body">
         <aside id="featured"><article>
-                <h1 class="entry-title"><a href="./how-much-to-save-for-a-comfortable-retirement.html">How much to save for a comfortable retirement?</a></h1>
+                <h1 class="entry-title"><a href="../how-much-to-save-for-a-comfortable-retirement.html">How much to save for a comfortable retirement?</a></h1>
 <footer class="post-info">
         <abbr class="published" title="2025-05-18T00:00:00-04:00">
                 Sun 18 May 2025
         </abbr>
 
         <address class="vcard author">
-                By <a class="url fn" href="./author/vladimir-strokov.html">Vladimir Strokov</a>
+                By <a class="url fn" href="../author/vladimir-strokov.html">Vladimir Strokov</a>
         </address>
-<p>In <a href="./category/personal-finance.html">personal finance</a>. </p>
+<p>In <a href="../category/personal-finance.html">personal finance</a>. </p>
 </p></footer><!-- /.post-info --><!-- /.post-info -->
                 <p>Retirement is often called the golden years, but whether they’ll be golden or just be there depends on how much you save regularly and for how long. In this post, I want to write down a retirement savings calculation based on a specific set of assumptions, starting with the premise that both earnings and retirement take place in the U.S.</p>
 <p>Let’s list the key ingredients of the calculation:</p>
@@ -76,7 +76,7 @@
 <p>Let us first estimate the required savings assuming average rates of inflation and growth. For inflation, we'll use <a href="https://www.bls.gov/data/">Consumer Price Index (CPI) data</a> from the U.S. Bureau of Labor Statistics. This is monthly data for all urban consumers (CPI-U) and all items. For the S&amp;P500, we'll use a table that tracks the growth of 100 USD invested in 1965, as quoted by the <a href="https://www.officialdata.org/us/stocks/s-p-500/1965">Official Data Foundation</a>. </p>
 <p><a href="#fig1">Figure 1</a> shows the monthly inflation (left) and growth (right) rates averaged backward in time. The averaging is performed by considering the growth over the previous <span class="math">\(N\)</span> months (starting today) and assuming that the value changed by <span class="math">\((1+r/100)^N\)</span>, where <span class="math">\(r (\%)\)</span> is the average monthly rate. The wild fluctuations of the S&amp;P500 rate in the recent months emphasize the importance of long-term investments spanning multiple years. These graphs also show that, on a timescale longer than <span class="math">\(\approx 10\)</span> years, the S&amp;P500 grows at <span class="math">\(\approx 1\%/\mbox{mo}\)</span>, compensating for the inflation, which occurs at <span class="math">\(\approx 0.3\%/\mbox{mo}\)</span>.</p>
 <figure id="fig1">
-<img src="./rates.png" style="display: block; margin: 0 auto; width: 90%; max-width: 90%;"/>
+<img src="../rates.png" style="display: block; margin: 0 auto; width: 90%; max-width: 90%;"/>
 <figcaption>Figure 1: Average monthly rates of inflation (left) and S&P500 growth (right).</figcaption>
 </figure>
 
@@ -157,51 +157,6 @@ which constitutes <span class="math">\(\approx 75\%\)</span> of our savings. If 
 }
 </script>
         </article></aside><!-- /#featured -->
-                <br><br>
-                <h1>Other articles</h1>
-                <hr />
-                    <ol id="posts-list" class="hfeed">
-        <li><article class="hentry">
-                <header>
-                        <h1><a href="./inferring-the-shape-of-a-mass-distribution.html" rel="bookmark" title="Permalink to Inferring the shape of a mass distribution">Inferring the shape of a mass distribution</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-02-13T00:00:00-05:00">
-                Thu 13 February 2025
-        </abbr>
-
-        <address class="vcard author">
-                By <a class="url fn" href="./author/vladimir-strokov.html">Vladimir Strokov</a>
-        </address>
-<p>In <a href="./category/population-inference.html">population inference</a>. </p>
-</p></footer><!-- /.post-info --><!-- /.post-info -->
-                <h1>Introduction</h1>
-<p><em>Population inference</em>, or <em>hierarchical inference</em>, is a class of inference problems where we want to constrain the (hyper)parameters of a theoretical distribution given a set of samples from that distribution. For example, consider the prices of a product in different stores. From theoretical considerations, we might expect that …</p>
-                <a class="readmore" href="./inferring-the-shape-of-a-mass-distribution.html">read more</a>
-                </div><!-- /.entry-content -->
-        </article></li>
-        <li><article class="hentry">
-                <header>
-                        <h1><a href="./hello-world.html" rel="bookmark" title="Permalink to Hello, world!">Hello, world!</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-01-28T00:00:00-05:00">
-                Tue 28 January 2025
-        </abbr>
-
-        <address class="vcard author">
-                By <a class="url fn" href="./author/vladimir-strokov.html">Vladimir Strokov</a>
-        </address>
-<p>In <a href="./category/tests.html">tests</a>. </p>
-</p></footer><!-- /.post-info --><!-- /.post-info -->
-                <p>This is the first post using <a href="https://getpelican.com/">pelican</a>. Although the pelican theme for this blog is called <a href="https://github.com/getpelican/pelican-themes/tree/master/notmyidea-cms">notmyidea-cms</a>, all posts represent my original work if not stated otherwise. I use Claude for grammar check as well as Claude Code for compilation issues with LaTeX, HTML, etc. I may later modify the …</p>
-                <a class="readmore" href="./hello-world.html">read more</a>
-                </div><!-- /.entry-content -->
-        </article></li>
 </ol><!-- /#posts-list -->
 </section><!-- /#content -->
 
@@ -209,9 +164,9 @@ which constitutes <span class="math">\(\approx 75\%\)</span> of our savings. If 
                 <div class="widget">
                         <h2>Categories</h2>
                         <ul>
-                           <li ><a href="./category/personal-finance.html">personal finance</a></li>
-                           <li ><a href="./category/population-inference.html">population inference</a></li>
-                           <li ><a href="./category/tests.html">tests</a></li>
+                           <li class="active"><a href="../category/personal-finance.html">personal finance</a></li>
+                           <li ><a href="../category/population-inference.html">population inference</a></li>
+                           <li ><a href="../category/tests.html">tests</a></li>
                         </ul>
                 </div>
                 <div class="widget">
@@ -223,7 +178,7 @@ which constitutes <span class="math">\(\approx 75\%\)</span> of our savings. If 
                 <div class="widget social">
                         <h2>Social</h2>
                         <ul>
-<!--                             <li><a href="./None" rel="alternate">atom feed</a></li>
+<!--                             <li><a href="../None" rel="alternate">atom feed</a></li>
 
  -->                                                    <li><a href="https://github.com/CosmoVlad/">GitHub</a></li>
                             <li><a href="https://www.linkedin.com/in/vladimir-strokov-cosmovlad/">LinkedIn</a></li>
