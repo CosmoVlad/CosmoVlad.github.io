@@ -1,244 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <title>Blog</title>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="./theme/css/main.css" type="text/css" />
-        <link href="./" type="application/atom+xml" rel="alternate" title="Blog ATOM Feed" />
-
-
-        <!--[if IE]>
-                <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-
-        <!--[if lte IE 7]>
-                <link rel="stylesheet" type="text/css" media="all" href="./css/ie.css"/>
-                <script src="./js/IE8.js" type="text/javascript"></script><![endif]-->
-
-        <!--[if lt IE 7]>
-                <link rel="stylesheet" type="text/css" media="all" href="./css/ie6.css"/><![endif]-->
-
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Blog</title>
+        <link rel="stylesheet" href="./theme/css/main.css" />
+        <link rel="stylesheet" href="./theme/css/pygment.css" />
 </head>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="./index.html">Blog </a></h1>
-                <nav><ul>
-                <li><a href="./">Archives</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
+<body>
+<div id="page">
 
-     <section id="content" class="body">
-        <aside id="featured"><article>
-                <h1 class="entry-title"><a href="./how-much-to-save-for-a-comfortable-retirement.html">How much to save for a comfortable retirement?</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2025-05-18T00:00:00-04:00">
-                Sun 18 May 2025
-        </abbr>
-
-        <address class="vcard author">
-                By <a class="url fn" href="./author/vladimir-strokov.html">Vladimir Strokov</a>
-        </address>
-<p>In <a href="./category/personal-finance.html">personal finance</a>. </p>
-</p></footer><!-- /.post-info --><!-- /.post-info -->
-                <p>Retirement is often called the golden years, but whether they’ll be golden or just be there depends on how much you save regularly and for how long. In this post, I want to write down a retirement savings calculation based on a specific set of assumptions, starting with the premise that both earnings and retirement take place in the U.S.</p>
-<p>Let’s list the key ingredients of the calculation:</p>
-<ol>
-<li>
-<p><strong>Family Status</strong><br>
-   To ensure that, in retirement, we rely on others as little as possible, this calculation will focus on <strong>single individuals</strong>.</p>
-</li>
-<li>
-<p><strong>Net Retirement Income</strong><br>
-   Unlike most online retirement calculations, I’ll use <strong>net income</strong> (after taxes) because it’s more realistic and reflects the amount you can actually spend. Personally, I prefer income figures that represent take-home pay.<br>
-   For a realistic number, consider that in retirement, ideally, you won’t need to work and can choose to live in a lower cost-of-living (COL) area. According to the U.S. Census Bureau (<a href="https://www2.census.gov/library/publications/2024/demo/p60-282.pdf">Guzman and Kollar, 2023</a>), the median post-tax income for individuals aged 65 and older was 49,510 (USD) in 2022 and 51,400 in 2023. For simplicity, let’s assume a target of <strong>$50,000</strong>. The numbers cited are in (approximately) today’s dollars, which is why we’ll need to adjust them for inflation (see below).</p>
-</li>
-<li>
-<p><strong>Where to Keep the Retirement Savings?</strong><br>
-   In the U.S., there are specialized retirement accounts like 401(k), IRA, and Roth IRA. Although they offer tax advantages, they also come with limitations. For example, these accounts have annual contribution limits (especially low for IRAs) and penalties for early withdrawals (typically before age 59½).<br>
-   To keep things flexible, I’ll assume savings are held in a <strong>brokerage account</strong>, with investments tied to the <strong>S&amp;P 500 index</strong>. Regarding tax implications, we’ll pay taxes on capital gains (the "profit" we earn from investing). In 2025, the tax brackets for those filing as single are as follows (note: these amounts are are to be adjusted for inflation):  </p>
-<ul>
-<li>0% for 0&ndash;48,350 USD,  </li>
-<li>15% for 48,351&ndash;533,400 USD,  </li>
-<li>20% for 533,401 and above.<br>
-   In principle, it’s also possible to account for the standard deduction ($15,000 for single filers in 2025), but since I’m not certain if it applies in this specific retirement scenario, I’ll assume no additional deductions. This will provide a more conservative estimate of retirement savings. Also, note that the upper end of the first bracket is very close to our assumed net retirement income of $50,000. If we can keep our income within the 0% bracket, our <strong>gross</strong> and <strong>net</strong> income would be the same, as there would be no taxes on capital gains. I plan to look at the potential benefits of reducing our net income to $48,350 to stay within the 0% tax bracket in a follow-up post.</li>
-</ul>
-</li>
-<li>
-<p><strong>Inflation</strong><br>
-   The numbers for retirement income and tax brackets we’re assuming are in <strong>today’s dollars</strong>. A specific number is, in fact, a proxy for the level of financial freedom we’d like to have. This means we’ll need to adjust these numbers for inflation. We’ll assume that both income and tax brackets are adjusted at the same rate of inflation.</p>
-</li>
-<li>
-<p><strong>Duration of Retirement.</strong><br>
-   We'll assume the canonical <strong>4% rule</strong>, meaning we'll plan to withdraw 4% of our retirement savings each year. With this approach, our savings will last approximately 25 years, although the actual duration may be somewhat longer if the savings continue to grow in the brokerage account.</p>
-</li>
-</ol>
-<h1>Simple Estimates</h1>
-<p>Let us first estimate the required savings assuming average rates of inflation and growth. For inflation, we'll use <a href="https://www.bls.gov/data/">Consumer Price Index (CPI) data</a> from the U.S. Bureau of Labor Statistics. This is monthly data for all urban consumers (CPI-U) and all items. For the S&amp;P500, we'll use a table that tracks the growth of 100 USD invested in 1965, as quoted by the <a href="https://www.officialdata.org/us/stocks/s-p-500/1965">Official Data Foundation</a>. </p>
-<p><a href="#fig1">Figure 1</a> shows the monthly inflation (left) and growth (right) rates averaged backward in time. The averaging is performed by considering the growth over the previous <span class="math">\(N\)</span> months (starting today) and assuming that the value changed by <span class="math">\((1+r/100)^N\)</span>, where <span class="math">\(r (\%)\)</span> is the average monthly rate. The wild fluctuations of the S&amp;P500 rate in the recent months emphasize the importance of long-term investments spanning multiple years. These graphs also show that, on a timescale longer than <span class="math">\(\approx 10\)</span> years, the S&amp;P500 grows at <span class="math">\(\approx 1\%/\mbox{mo}\)</span>, compensating for the inflation, which occurs at <span class="math">\(\approx 0.3\%/\mbox{mo}\)</span>.</p>
-<figure id="fig1">
-<img src="./rates.png" style="display: block; margin: 0 auto; width: 90%; max-width: 90%;"/>
-<figcaption>Figure 1: Average monthly rates of inflation (left) and S&P500 growth (right).</figcaption>
-</figure>
-
-<p>With a monthly inflation rate of <span class="math">\(0.3\%\)</span>, in twenty years, today's 50,000 will turn into <span class="math">\(50000\times (1+0.003)^{20\times 12}\approx 102600\)</span> USD. Using the 4\% rule, we'll need <span class="math">\(S=25\times 102600\approx 2,500,000\)</span> (two and a half million dollars!) of retirement savings. Investing in the S&amp;P500 that grows at 1\% per month, we'll have to save
-</p>
-<div class="math">$$
-x = \frac{S}{1+q}\frac{q}{(1+q)^N - 1},
-$$</div>
-<p>
-where <span class="math">\(q\)</span> is the growth rate, and <span class="math">\(N\)</span> is the number of contributions. Substituting <span class="math">\(q\approx 0.01\)</span> and <span class="math">\(N=12\times 20=240\)</span>, we get <span class="math">\(x\approx 2,560\)</span> USD. This is the amount we'll need to save monthly if we want to enjoy 50,000 USD every year in 20 years. So far, we haven't taken taxes into account. To estimate what part of the adjusted monthly amount <span class="math">\(102,600\)</span> is taxable, we can assume that capital gains are uniformly distributed between our S&amp;P500 shares. The capital gains
-</p>
-<div class="math">$$
-g = S - Nx \approx 1,950,000,
-$$</div>
-<p>
-which constitutes <span class="math">\(\approx 75\%\)</span> of our savings. If we find ourselves in the 15\% tax bracket, our effective tax rate will be <span class="math">\(0.75\times 0.15\times 100\%\approx 11\%\)</span>, which means we'll need to withdraw <span class="math">\(102,600/0.89\approx 115,300\)</span> USD if we want the net income <span class="math">\(102,600\)</span>. Our savings should still last about 25 years, because we'll keep them invested in the S&amp;P500, and hopefully the growth will make up for the taxes.</p>
-<p>To summarize, under the simple assumptions above, saving around <span class="math">\(2,500&ndash;3,000\)</span> USD per month for 20 years in an S&amp;P500-indexed brokerage account should be enough to support a $50,000-per-year (in today's dollars) retirement income for about 25 years. In a future post, I'll revisit this estimate to account for the volatility of inflation and S&amp;P500 returns, and explore whether staying within the 0% capital-gains bracket would meaningfully change the required contribution.</p>
-<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width < 768) ? "left" : align;
-        indent = (screen.width < 768) ? "0em" : indent;
-        linebreak = (screen.width < 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
-
-    var configscript = document.createElement('script');
-    configscript.type = 'text/x-mathjax-config';
-    configscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        availableFonts: ['STIX', 'TeX']," +
-        "        preferredFont: 'STIX'," +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-</script>
-        </article></aside><!-- /#featured -->
-                <br><br>
-                <h1>Other articles</h1>
-                <hr />
-                    <ol id="posts-list" class="hfeed">
-        <li><article class="hentry">
-                <header>
-                        <h1><a href="./inferring-the-shape-of-a-mass-distribution.html" rel="bookmark" title="Permalink to Inferring the shape of a mass distribution">Inferring the shape of a mass distribution</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-02-13T00:00:00-05:00">
-                Thu 13 February 2025
-        </abbr>
-
-        <address class="vcard author">
-                By <a class="url fn" href="./author/vladimir-strokov.html">Vladimir Strokov</a>
-        </address>
-<p>In <a href="./category/population-inference.html">population inference</a>. </p>
-</p></footer><!-- /.post-info --><!-- /.post-info -->
-                <h1>Introduction</h1>
-<p><em>Population inference</em>, or <em>hierarchical inference</em>, is a class of inference problems where we want to constrain the (hyper)parameters of a theoretical distribution given a set of samples from that distribution. For example, consider the prices of a product in different stores. From theoretical considerations, we might expect that …</p>
-                <a class="readmore" href="./inferring-the-shape-of-a-mass-distribution.html">read more</a>
-                </div><!-- /.entry-content -->
-        </article></li>
-        <li><article class="hentry">
-                <header>
-                        <h1><a href="./hello-world.html" rel="bookmark" title="Permalink to Hello, world!">Hello, world!</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-01-28T00:00:00-05:00">
-                Tue 28 January 2025
-        </abbr>
-
-        <address class="vcard author">
-                By <a class="url fn" href="./author/vladimir-strokov.html">Vladimir Strokov</a>
-        </address>
-<p>In <a href="./category/tests.html">tests</a>. </p>
-</p></footer><!-- /.post-info --><!-- /.post-info -->
-                <p>This is the first post using <a href="https://getpelican.com/">pelican</a>. Although the pelican theme for this blog is called <a href="https://github.com/getpelican/pelican-themes/tree/master/notmyidea-cms">notmyidea-cms</a>, all posts represent my original work if not stated otherwise. I use Claude for grammar check as well as Claude Code for compilation issues with LaTeX, HTML, etc. I may later modify the …</p>
-                <a class="readmore" href="./hello-world.html">read more</a>
-                </div><!-- /.entry-content -->
-        </article></li>
-</ol><!-- /#posts-list -->
-</section><!-- /#content -->
-
-        <aside id="sidebar">
-                <div class="widget">
-                        <h2>Categories</h2>
-                        <ul>
-                           <li ><a href="./category/personal-finance.html">personal finance</a></li>
-                           <li ><a href="./category/population-inference.html">population inference</a></li>
-                           <li ><a href="./category/tests.html">tests</a></li>
+        <header id="masthead">
+                <nav class="topnav" aria-label="Site">
+                        <a class="topnav-home" href="./../../index.html">Vladimir Strokov</a>
+                        <ul class="topnav-links">
+                                <li><a href="./../../blog/output/index.html" class="active" aria-current="true">Blog</a></li>
+                                <li><a href="./../../reproduce-a-paper/output/index.html">Reproduce&#8209;a&#8209;Paper</a></li>
+                                <li><a href="./archives.html">Archives</a></li>
                         </ul>
+                </nav>
+                <div class="site-title">
+                        <a href="./index.html">Blog</a>
                 </div>
-                <div class="widget">
-                        <h2>Pages</h2>
-                        <ul>
-                            <li><a href="https://cosmovlad.github.io">Personal Webpage</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="widget social">
-                        <h2>Social</h2>
-                        <ul>
-<!--                             <li><a href="./None" rel="alternate">atom feed</a></li>
+        </header>
 
- -->                                                    <li><a href="https://github.com/CosmoVlad/">GitHub</a></li>
-                            <li><a href="https://www.linkedin.com/in/vladimir-strokov-cosmovlad/">LinkedIn</a></li>
-                            <li><a href="#">Instagram</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </aside><!-- /#sidebar -->
+        <main id="content">
+<section class="listing">
+        <header class="listing-header">
+<h1>All posts</h1>        </header>
+        <ul class="entry-list">
+                <li class="entry">
+                        <h2 class="entry-title"><a href="./how-much-to-save-for-a-comfortable-retirement.html">How much to save for a comfortable retirement?</a></h2>
+                        <p class="entry-meta">
+                                <time datetime="2025-05-18T00:00:00-04:00">May 18, 2025</time>
+                                <span class="sep" aria-hidden="true">&middot;</span>
+                                <a class="entry-cat" href="./category/personal-finance.html">personal finance</a>
+                        </p>
+                </li>
+                <li class="entry">
+                        <h2 class="entry-title"><a href="./inferring-the-shape-of-a-mass-distribution.html">Inferring the shape of a mass distribution</a></h2>
+                        <p class="entry-meta">
+                                <time datetime="2025-02-13T00:00:00-05:00">February 13, 2025</time>
+                                <span class="sep" aria-hidden="true">&middot;</span>
+                                <a class="entry-cat" href="./category/population-inference.html">population inference</a>
+                        </p>
+                </li>
+                <li class="entry">
+                        <h2 class="entry-title"><a href="./hello-world.html">Hello, world!</a></h2>
+                        <p class="entry-meta">
+                                <time datetime="2025-01-28T00:00:00-05:00">January 28, 2025</time>
+                                <span class="sep" aria-hidden="true">&middot;</span>
+                                <a class="entry-cat" href="./category/tests.html">tests</a>
+                        </p>
+                </li>
+        </ul>
+</section>
+        </main>
 
-        <footer id="footer" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="https://getpelican.com/">pelican</a> with theme <a href="https://github.com/getpelican/pelican-themes/tree/master/notmyidea-cms">notmyidea-cms</a>, which take advantage of <a href="http://python.org">python</a>.
-                </address><!-- /#about -->
+        <footer id="colophon">
+                <ul class="colophon-links">
+                        <li><a href="https://cosmovlad.github.io">Personal Webpage</a></li>
+                        <li><a href="https://github.com/CosmoVlad/">GitHub</a></li>
+                        <li><a href="https://www.linkedin.com/in/vladimir-strokov-cosmovlad/">LinkedIn</a></li>
+                        <li><a href="https://www.instagram.com/vlad.physics/">Instagram</a></li>
+                </ul>
+                <p class="copyright">&copy; Vladimir Strokov. All rights reserved.
+                Powered by <a href="https://getpelican.com/">Pelican</a>.
+                Design matched to <a href="https://html5up.net">HTML5 UP</a> Editorial.</p>
+        </footer>
 
-                <!-- <p>The theme is «notmyidea-cms», a modified version of «notmyidea», the default theme.</p> -->
-        </footer><!-- /#footer -->
-
+</div>
 </body>
 </html>

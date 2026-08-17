@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Tags &ndash; {{ SITENAME }}{% endblock %}
+{% block content %}
+<section class="listing">
+        <header class="listing-header">
+                <h1>Tags</h1>
+        </header>
+        {% if tags %}
+        <ul class="entry-list">
+        {% for tag, tag_articles in tags|sort %}
+                <li class="entry">
+                        <h2 class="entry-title"><a href="{{ SITEURL }}/{{ tag.url }}">{{ tag }}</a></h2>
+                        <p class="entry-meta">{{ tag_articles|count }} post{{ 's' if tag_articles|count != 1 }}</p>
+                </li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>No tags yet.</p>
+        {% endif %}
+</section>
+{% endblock %}

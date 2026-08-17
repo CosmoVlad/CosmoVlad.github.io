@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title|striptags }} &ndash; {{ SITENAME }}{% endblock %}
+{% block content %}
+<article class="post">
+        <header class="post-header">
+                <h1 class="post-title">{{ article.title }}</h1>
+                {% include 'article_infos.html' %}
+        </header>
+        <div class="post-content">
+        {{ article.content }}
+        </div>
+        <footer class="post-end">
+                <a class="backlink" href="{{ SITEURL }}/index.html">&larr; All posts</a>
+        </footer>
+</article>
+{% endblock %}

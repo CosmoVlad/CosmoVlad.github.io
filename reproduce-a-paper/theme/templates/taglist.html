@@ -1,0 +1,4 @@
+{% if article.tags %}
+<span class="sep" aria-hidden="true">&middot;</span>
+{% for tag in article.tags %}<a class="entry-tag" href="{{ SITEURL }}/{{ tag.url }}">{{ tag }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
+{% endif %}

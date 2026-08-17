@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+        <link rel="stylesheet" href="{{ SITEURL }}/theme/css/main.css" />
+        <link rel="stylesheet" href="{{ SITEURL }}/theme/css/pygment.css" />
+        {% if FEED_ALL_ATOM %}
+        <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} ATOM Feed" />
+        {% endif %}
+        {% if FEED_ALL_RSS %}
+        <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_RSS }}" type="application/rss+xml" rel="alternate" title="{{ SITENAME }} RSS Feed" />
+        {% endif %}
+</head>
+
+<body>
+<div id="page">
+
+        <header id="masthead">
+                {# Masthead links are RELATIVE so they work identically in local
+                   preview (file://) and on the live site. With RELATIVE_URLS,
+                   SITEURL is the per-page prefix ("." at output root, ".." in
+                   category/author subdirs), and each blog's output/ sits two
+                   levels below the repo root, so SITEURL/../../ is the root. #}
+                <nav class="topnav" aria-label="Site">
+                        <a class="topnav-home" href="{{ SITEURL }}/../../index.html">Vladimir Strokov</a>
+                        <ul class="topnav-links">
+                                <li><a href="{{ SITEURL }}/../../blog/output/index.html"{% if SITENAME == 'Blog' %} class="active" aria-current="true"{% endif %}>Blog</a></li>
+                                <li><a href="{{ SITEURL }}/../../reproduce-a-paper/output/index.html"{% if SITENAME == 'Reproduce-a-Paper' %} class="active" aria-current="true"{% endif %}>Reproduce&#8209;a&#8209;Paper</a></li>
+                                <li><a href="{{ SITEURL }}/archives.html">Archives</a></li>
+                        </ul>
+                </nav>
+                <div class="site-title">
+                        <a href="{{ SITEURL }}/index.html">{{ SITENAME }}</a>
+                </div>
+                {% if SITESUBTITLE %}
+                <p class="site-tagline">{{ SITESUBTITLE }}</p>
+                {% endif %}
+        </header>
+
+        <main id="content">
+        {% block content %}
+        {% endblock %}
+        </main>
+
+        <footer id="colophon">
+                <ul class="colophon-links">
+                {% if LINKS %}
+                {% for name, link in LINKS %}
+                        <li><a href="{{ link }}">{{ name }}</a></li>
+                {% endfor %}
+                {% endif %}
+                {% if SOCIAL %}
+                {% for name, link in SOCIAL %}
+                {% if link and link != '#' %}
+                        <li><a href="{{ link }}">{{ name }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                </ul>
+                <p class="copyright">&copy; {{ AUTHOR }}. All rights reserved.
+                Powered by <a href="https://getpelican.com/">Pelican</a>.
+                Design matched to <a href="https://html5up.net">HTML5 UP</a> Editorial.</p>
+        </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="listing">
+        <header class="listing-header">
+                {% block listing_title %}<h1>All posts</h1>{% endblock %}
+        </header>
+        {% if articles %}
+        <ul class="entry-list">
+        {% for article in articles %}
+                <li class="entry">
+                        <h2 class="entry-title"><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></h2>
+                        <p class="entry-meta">
+                                <time datetime="{{ article.date.isoformat() }}">{{ article.date.strftime('%B %-d, %Y') }}</time>
+                                <span class="sep" aria-hidden="true">&middot;</span>
+                                <a class="entry-cat" href="{{ SITEURL }}/{{ article.category.url }}">{{ article.category }}</a>
+                        </p>
+                </li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>No posts yet.</p>
+        {% endif %}
+</section>
+{% endblock content %}

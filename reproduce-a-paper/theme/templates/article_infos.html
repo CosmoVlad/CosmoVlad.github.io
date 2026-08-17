@@ -1,0 +1,7 @@
+<p class="post-meta">
+        <time datetime="{{ article.date.isoformat() }}">{{ article.date.strftime('%B %-d, %Y') }}</time>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a class="entry-cat" href="{{ SITEURL }}/{{ article.category.url }}">{{ article.category }}</a>
+        {% include 'taglist.html' %}
+        {% include 'translations.html' %}
+</p>

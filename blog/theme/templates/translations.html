@@ -1,0 +1,7 @@
+{% if article.translations %}
+<span class="sep" aria-hidden="true">&middot;</span>
+Translations:
+{% for translation in article.translations %}
+<a href="{{ SITEURL }}/{{ translation.url }}">{{ translation.lang }}</a>
+{% endfor %}
+{% endif %}

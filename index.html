@@ -6,11 +6,24 @@
 -->
 <html>
 	<head>
-		<title>Vladimir STROKOV</title>
+		<title>Vladimir STROKOV | Physics &amp; Data</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="Physics &amp; Data" />
+		<link rel="icon" type="image/png" href="images/favicon.png" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<!-- <link rel="stylesheet" href="assets/css/fontawesome-all.min.css" /> -->
+			<style>
+			/* About banner: heading above, photo top-aligned with the text row */
+			#banner > header h2 { font-size: 2em; }
+			#banner .news { font-size: 0.95em; margin-bottom: 1.5em; }
+			#banner { display: block; padding-top: 2em; }
+			#banner .banner-row { display: flex; }
+			@media screen and (orientation: portrait) {
+				#banner .banner-row { flex-direction: column-reverse; }
+				#banner .banner-row .image { margin-left: 0; }
+			}
+		</style>
 	</head>
 	<body class="is-preload">
 
@@ -23,36 +36,41 @@
 
 							<!-- Header -->
 								<header id="header">
-									<a href="index.html" class="logo">Vladimir STROKOV</a>
+									<a href="index.html" class="logo">Vladimir STROKOV | Physics &amp; Data</a>
 									<ul class="icons">
 											<li><a target="_blank" rel="noopener noreferrer" href="https://github.com/CosmoVlad/" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
 											<li><a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/vladimir-strokov-cosmovlad/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
 <!-- 										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
 										<li><a href="#" class="icon brands fa-snapchat-ghost"><span class="label">Snapchat</span></a></li> -->
-										<li><a target="_blank" rel="noopener noreferrer" href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/vlad.physics/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
 										<!-- <li><a href="#" class="icon brands fa-medium-m"><span class="label">Medium</span></a></li> -->
 									</ul>
 								</header>
 
 							<!-- Banner -->
 								<section id="banner">
-									<div class="content">
 										<header>
 											<h2>About</h2>
-											<!-- <p>A free and fully responsive site template</p> -->
 										</header>
-										<p>I am a postdoctoral fellow at the Center for Gravitational Waves and Cosmology (GWAC) at West Virginia University. My research focuses on various aspects of the future gravitational-wave detector LISA (Laser Interferometer Space Antenna). On the technical side, I am interested in data processing methods which can effectively solve the so-called global fit problem in LISA. On a more applied level, I study how LISA can help us understand astrophysical populations, such as binary black holes and double white dwarfs. My broader interests include applications of machine learning in astrophysics.</p>
-										<p>My <a target="_blank" rel="noopener noreferrer" href="blog/output/index.html">Blog</a> is a collection of miscellaneous, relatively short calculations that I worked out to better understand certain topics, but which are too simple to include in a formal paper.</p>
-										<p>In <a target="_blank" rel="noopener noreferrer" href="reproduce-a-paper/output/index.html">Reproduce-a-Paper</a> I reproduce calculations from papers by other authors that caught my attention. This helps me better understand their results and serves as a small contribution to reproducibility, which is one of the cornerstones of scientific research.</p>
+										<p class="news"><strong>Aug 2026:</strong> new paper <em>The glow of eternal black holes</em> (<a target="_blank" rel="noopener noreferrer" href="https://arxiv.org/abs/2608.05270">arXiv:2608.05270</a>), with an <a href="latest-papers.html">interactive companion</a>.</p>
 										<ul class="actions">
 											<li><a target="_blank" rel="noopener noreferrer" href="materials/CV.pdf" class="button big">CV</a></li>
 											<li><a target="_blank" rel="noopener noreferrer" href="materials/publications.pdf" class="button big">Publications</a></li>
 										</ul>
-									</div>
-									<span class="image object">
-										<img src="images/pfp.jpg" alt="" />
-									</span>
-								</section>
+										<div class="banner-row">
+										<div class="content">
+										<!-- content:about -->
+<p>I am a postdoctoral fellow at the Center for Gravitational Waves and Cosmology (GWAC) at West Virginia University. My research focuses on various aspects of the future gravitational-wave detector LISA (Laser Interferometer Space Antenna). On the technical side, I am interested in data processing methods which can effectively solve the so-called global fit problem in LISA. On a more applied level, I study how LISA can help us understand astrophysical populations, such as binary black holes and double white dwarfs. My broader interests include applications of machine learning in astrophysics.</p>
+<p>In <a href="latest-papers.html">My Latest Papers</a> I summarize my most recent research articles, together with interactive companions where available.</p>
+<p>My <a target="_blank" rel="noopener noreferrer" href="blog/output/index.html">Blog</a> is a collection of miscellaneous, relatively short calculations that I worked out to better understand certain topics, but which are too simple to include in a formal paper.</p>
+<p>In <a target="_blank" rel="noopener noreferrer" href="reproduce-a-paper/output/index.html">Reproduce-a-Paper</a> I reproduce calculations from papers by other authors that caught my attention. This helps me better understand their results and serves as a small contribution to reproducibility, which is one of the cornerstones of scientific research.</p>
+<!-- /content:about -->
+											</div>
+											<span class="image object">
+												<img src="images/pfp.jpg" alt="" />
+											</span>
+										</div>
+									</section>
 
 							<!-- Section -->
 								<!-- <section>
@@ -172,6 +190,7 @@
 										<li>
 											<span class="opener">Research</span>
 											<ul>
+												<li><a href="latest-papers.html">My latest papers</a></li>
 												<li><a target="_blank" rel="noopener noreferrer" href="materials/CV.pdf">Curriculum Vitae (CV)</a></li>
 												<li><a target="_blank" rel="noopener noreferrer" href="materials/publications.pdf">Publications</a></li>
 											</ul>
