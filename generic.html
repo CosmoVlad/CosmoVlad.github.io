@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Generic - Editorial by HTML5 UP</title>
+		<title>Teaching - Vladimir STROKOV</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<meta name="description" content="Physics &amp; Data" />
@@ -15,7 +15,15 @@
 			<style>
 			header.main h1 { font-size: 2em; }
 			#main > .inner > section h2 { font-size: 1.35em; }
+			#main > .inner > section h3 { margin-top: 1.5em; }
+			video.fit { width: 100%; height: auto; display: block; border-radius: 0.375em; }
+			p.panel-title { font-size: 1em; font-weight: 600; text-align: center; margin: 0 0 0.5em 0; }
+			p.backlink { font-size: 0.85em; margin: 0.4em 0 0 0; }
 		</style>
+		<script>
+			MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 	</head>
 	<body class="is-preload">
 
@@ -47,8 +55,62 @@
 
 									<h2>PHYS 633-001: Advanced Electromagnetism 1</h2>
 									<p><em>West Virginia University &mdash; Spring 2026</em></p>
-									<p>Sole course instructor for a graduate-level course on advanced electromagnetism at the Department of Physics and Astronomy, West Virginia University.</p>
-									<p><em>Course materials to be added.</em></p>
+									<p>Sole course instructor</p>
+									<h3 id="visualizations">Selected visualizations</h3>
+									<ol>
+										<li><a href="#viz-cap">Charged sphere with a missing polar cap</a></li>
+										<li><a href="#viz-laplace">Solving the Laplace equation numerically</a></li>
+										<li><a href="#viz-gradb">Drift in a magnetic-field gradient</a></li>
+										<li><a href="#viz-mirror">Magnetic mirror</a></li>
+									</ol>
+
+									<h3 id="viz-cap">1. Charged sphere with a missing polar cap</h3>
+									<h4>(Gaussian/CGS units)</h4>
+									<p>This problem explores the transition between a continuous and a discontinuous solution for the electrostatic field. It is well known that there is a jump in the electric field at the surface of a uniformly charged sphere. (And this jump is proportional to the surface charge density.) But what if we remove a polar cap $\theta \le \alpha$ from a uniformly charged thin spherical shell? As we move from the outside to the inside through the resulting "crater", the field is continuous, because there is no longer any charged surface to generate a discontinuity. As the cap gets smaller, the field remains continuous. But how is the discontinuity restored when the cap is finally closed? This transition can be visualized by representing the potential as the full-shell potential minus that of the cap, expanded in Legendre polynomials with closed-form coefficients $f_\ell = [P_{\ell-1}(\cos\alpha) - P_{\ell+1}(\cos\alpha)]/(2\ell+1)$. The field follows by differentiating the series term by term.</p>
+									<p>All four animations shrink the opening from $\alpha = 45^\circ$ to $1.8^\circ$. The field inside weakens and the shell approaches the complete sphere, while the field energy concentrates near the rim of the hole. On the symmetry axis the potential and $E_z$ have closed forms. The dashed curves show the complete shell, with $E_z$ jumping by $4\pi\sigma$ at the surface. With the cap removed, the jump at the north pole is replaced by a smooth peak that sharpens as the hole closes.</p>
+									<div class="box alt">
+										<div class="row gtr-50 gtr-uniform">
+											<div class="col-6 col-12-small"><p class="panel-title">Equipotentials (blue) and field lines (red)</p><video class="fit" src="images/teaching/advem/cap_alpha_field.mp4" autoplay loop muted playsinline controls></video></div>
+											<div class="col-6 col-12-small"><p class="panel-title">Field energy density $|\mathbf{E}|^2/8\pi$ on a logarithmic scale</p><video class="fit" src="images/teaching/advem/cap_alpha_energy.mp4" autoplay loop muted playsinline controls></video></div>
+											<div class="col-6 col-12-small"><p class="panel-title">Potential on the symmetry axis</p><video class="fit" src="images/teaching/advem/cap_alpha_phi_z.mp4" autoplay loop muted playsinline controls></video></div>
+											<div class="col-6 col-12-small"><p class="panel-title">Field component $E_z$ on the symmetry axis</p><video class="fit" src="images/teaching/advem/cap_alpha_ez_z.mp4" autoplay loop muted playsinline controls></video></div>
+										</div>
+									</div>
+									<p class="backlink"><a href="#visualizations">Back to the list</a></p>
+
+									<h3 id="viz-laplace">2. Solving the Laplace equation numerically</h3>
+									<p>In one homework problem, students solved the Laplace equation on the unit square with a set of boundary conditions that leads to a closed-form analytical solution. They solved it numerically and compared the result to the exact solution. One of the simplest numerical methods for the Laplace equation is the so-called <em>5-point stencil</em> on a regular grid. It starts with arbitrary values on the interior grid nodes and the boundary-condition values on the boundary nodes. Then, the next approximation at a node is obtained as the mean of the values at the four closest nodes. This process is repeated multiple times until a satisfactory convergence is reached. There are two versions of this method: (i) Gauss&ndash;Seidel, in which each updated value is used immediately for the next update, and (ii) Jacobi, in which only the previous values are used until the entire grid has been updated.</p> 
+									<p><strong>Details.</strong> Boundary conditions: The potential equals 1 on two sides and grows linearly from 0 to 1 along the other two. Exact solution: $\Phi = x + y - xy$. Initial approximation: $\Phi = 0$ inside.</p>
+									<p>The movies follow the two schemes on an $81 \times 81$ grid for 2,000 iterations, with the iteration count growing logarithmically. The boundary values seep inward slowly. Gauss&ndash;Seidel converges about twice as fast as Jacobi: after 2,000 iterations its error is 0.03, against 0.13 for Jacobi.</p>
+									<div class="box alt">
+										<div class="row gtr-50 gtr-uniform">
+											<div class="col-6 col-12-small"><p class="panel-title">Jacobi iteration</p><video class="fit" src="images/teaching/advem/laplace_relaxation_jacobi.mp4" autoplay loop muted playsinline controls></video></div>
+											<div class="col-6 col-12-small"><p class="panel-title">Gauss&ndash;Seidel iteration</p><video class="fit" src="images/teaching/advem/laplace_relaxation_gauss-seidel.mp4" autoplay loop muted playsinline controls></video></div>
+										</div>
+									</div>
+									<p class="backlink"><a href="#visualizations">Back to the list</a></p>
+
+									<h3 id="viz-gradb">3. Drift in a magnetic-field gradient</h3>
+									<h4>(SI units)</h4>
+									<p>In a uniform magnetic field, a charged particle moves along a circle looping around the field lines. If the field strength varies across the orbit, the circle no longer closes. The particle turns more sharply where the field is stronger, and its guiding center drifts perpendicular to both the field and its gradient. This is the <em>gradient drift</em> (or $\nabla B$ drift). In the animations, the trajectories are integrated numerically from Newton's second law with the Lorentz force, assuming the field $\mathbf{B} = (B_0 + \alpha x)\,\hat{\mathbf{z}}$, which points along the $z$-axis while its strength grows along the perpendicular $x$-axis. Both panels share the same axes. The drift velocity $v_\mathrm{d} = m v_\perp^2 \alpha / 2qB_0^2$ is proportional to the gradient, so the second particle drifts three times as fast.</p>
+									<div class="box alt">
+										<div class="row gtr-50 gtr-uniform">
+											<div class="col-12"><p class="panel-title">Weaker gradient</p><video class="fit" src="images/teaching/advem/gradB_drift.mp4" autoplay loop muted playsinline controls></video></div>
+											<div class="col-12"><p class="panel-title">Gradient three times stronger</p><video class="fit" src="images/teaching/advem/gradB_drift_mu.mp4" autoplay loop muted playsinline controls></video></div>
+										</div>
+									</div>
+									<p class="backlink"><a href="#visualizations">Back to the list</a></p>
+
+									<h3 id="viz-mirror">4. Magnetic mirror</h3>
+									<p>A magnetic mirror is a region where the field lines converge. Here the field is axisymmetric and five times stronger at the center than far away. The type of a particle's motion is determined by its <em>pitch angle</em> $\theta$, i.e., the angle between the particle's velocity and the local magnetic field. A particle with a large pitch angle trades its motion along the field for gyration and is reflected. A particle with a small pitch angle, inside the loss cone $\sin^2\theta &lt; B_\mathrm{min}/B_\mathrm{max}$, passes through. The same physics traps particles in the Earth's radiation belts.</p>
+									<div class="box alt">
+										<div class="row gtr-50 gtr-uniform">
+											<div class="col-6 col-12-small"><p class="panel-title">Large pitch angle: the particle is reflected</p><video class="fit" src="images/teaching/advem/mirror_reflected.mp4" autoplay loop muted playsinline controls></video></div>
+											<div class="col-6 col-12-small"><p class="panel-title">Small pitch angle: the particle passes through</p><video class="fit" src="images/teaching/advem/mirror_passing.mp4" autoplay loop muted playsinline controls></video></div>
+										</div>
+									</div>
+
+									<p class="backlink"><a href="#visualizations">Back to the list</a></p>
 
 								</section>
 
